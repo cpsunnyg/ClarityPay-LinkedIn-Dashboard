@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ClarityPay — LinkedIn Analytics Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root {
+  --cp-blue:#075FDC; --cp-navy:#1E2D4D; --cp-sky:#C6E0F7; --cp-sky-tint:#EDF9FF;
+  --cp-white:#FFFFFF; --cp-wheat:#FAF5F0; --cp-wheat-100:#F5EBE0; --cp-black:#161616;
+  --cp-storm:#253F70; --cp-success:#12B765; --cp-error:#F04438; --cp-warning:#F7B009;
+  --cp-muted:#4F4F4F; --cp-muted-light:#888888;
+  --font-headline:'VictorSerif',Georgia,serif;
+  --font-body:'StabilGrotesk','Inter',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--cp-wheat);color:var(--cp-black);font-family:var(--font-body);font-size:14px;line-height:1.5;min-height:100vh;}
+.page{max-width:1200px;margin:0 auto;padding:48px 32px 100px;}
+.page-header{border-bottom:1.5px solid var(--cp-sky);padding-bottom:32px;margin-bottom:0;}
+.header-top{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;margin-bottom:16px;}
+.header-logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:32px;height:32px;background:var(--cp-blue);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.logo-wordmark{font-size:18px;font-weight:700;color:var(--cp-blue);letter-spacing:-0.02em;}
+.header-meta{text-align:right;font-size:12px;color:var(--cp-muted-light);line-height:1.6;}
+.page-title{font-family:var(--font-headline);font-size:40px;font-weight:400;color:var(--cp-black);letter-spacing:-0.02em;line-height:1;margin-bottom:6px;}
+.page-sub{font-size:14px;color:var(--cp-muted);}
+.tab-bar{display:flex;gap:0;border-bottom:2px solid var(--cp-sky);margin-bottom:32px;overflow-x:auto;margin-top:0;}
+.tab-btn{padding:14px 22px;font-size:13px;font-weight:600;color:var(--cp-muted);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;white-space:nowrap;transition:color .15s,border-color .15s;font-family:var(--font-body);}
+.tab-btn:hover{color:var(--cp-blue);}
+.tab-btn.active{color:var(--cp-blue);border-bottom-color:var(--cp-blue);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.slabel{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--cp-muted-light);margin:32px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--cp-sky);display:flex;align-items:baseline;gap:8px;}
+.slabel-note{font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:var(--cp-muted-light);font-style:italic;}
+.kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;}
+.kpi{background:var(--cp-white);border:1px solid var(--cp-sky);border-top:3px solid var(--cp-blue);border-radius:8px;padding:14px 16px;}
+.klbl{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--cp-muted-light);margin-bottom:6px;}
+.kval{font-size:26px;font-weight:700;color:var(--cp-black);line-height:1;letter-spacing:-0.02em;}
+.kval.up{color:var(--cp-success);}.kval.blue{color:var(--cp-blue);}
+.ksub{font-size:11px;color:var(--cp-muted-light);margin-top:3px;}
+.kdelta{font-size:11px;font-weight:600;margin-top:3px;}
+.kdelta.up{color:var(--cp-success);}.kdelta.down{color:var(--cp-error);}.kdelta.{color:var(--cp-muted-light);}
+.card{background:var(--cp-white);border:1px solid var(--cp-sky);border-radius:8px;padding:20px 22px;margin-bottom:8px;}
+.ctitle{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp-muted);margin-bottom:3px;}
+.csub{font-size:11px;color:var(--cp-muted-light);font-style:italic;margin-bottom:14px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.br{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.bl{font-size:11px;color:var(--cp-muted);width:170px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bl-sm{font-size:11px;color:var(--cp-muted);width:130px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.bt{flex:1;background:var(--cp-wheat-100);border-radius:3px;height:10px;overflow:hidden;}
+.bf{height:100%;border-radius:3px;}
+.bv{font-size:11px;color:var(--cp-muted-light);min-width:38px;text-align:right;}
+.sen-leg{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+.sen-leg span{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--cp-muted);}
+.sen-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0;}
+.fc{background:var(--cp-wheat);border:1px solid var(--cp-sky);border-radius:6px;padding:10px 14px;margin-bottom:6px;}
+.fcn{font-size:13px;font-weight:600;color:var(--cp-black);}
+.fct{font-size:11px;color:var(--cp-muted);margin-top:2px;}
+.cc{background:var(--cp-white);border:1px solid var(--cp-sky);border-left:4px solid var(--cp-blue);border-radius:8px;padding:20px 22px;margin-bottom:10px;}
+.cc.medium{border-left-color:var(--cp-storm);}
+.cc.watch{border-left-color:var(--cp-sky);}
+.ccname{font-size:15px;font-weight:700;color:var(--cp-black);margin-bottom:2px;}
+.ccperson{font-size:11px;color:var(--cp-muted);margin-bottom:10px;}
+.ccg{display:grid;grid-template-columns:1fr 1fr;gap:3px 16px;padding:12px 14px;background:var(--cp-wheat);border-radius:6px;}
+.ccr{font-size:11px;line-height:1.7;}
+.cck{color:var(--cp-muted-light);margin-right:4px;}
+.ccv{color:var(--cp-black);}
+.company-tiles{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.ctile{display:flex;align-items:center;gap:12px;background:var(--cp-wheat);border:1px solid var(--cp-sky);border-radius:8px;padding:12px 18px;flex:1;min-width:140px;}
+.ctile-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;font-weight:700;}
+.ctile-name{font-size:13px;font-weight:700;color:var(--cp-black);}
+.ctile-desc{font-size:10px;color:var(--cp-muted-light);}
+.goal-bar-track{background:var(--cp-wheat-100);border-radius:8px;height:20px;overflow:hidden;position:relative;}
+.goal-bar-fill{height:100%;background:linear-gradient(90deg,var(--cp-blue),#3A79D6);border-radius:8px;transition:width .8s ease;width:0%;}
+.goal-bar-lbl{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:var(--cp-muted);}
+.goal-milestones{display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--cp-muted-light);}
+.goal-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:14px;}
+.gs{background:var(--cp-wheat);border:1px solid var(--cp-sky);border-radius:7px;padding:10px 14px;}
+.gs-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--cp-muted-light);margin-bottom:3px;}
+.gs-val{font-size:18px;font-weight:700;color:var(--cp-black);}
+.gs-val.blue{color:var(--cp-blue);}
+.gs-sub{font-size:10px;color:var(--cp-muted-light);}
+.wt-table{width:100%;border-collapse:collapse;font-size:12px;}
+.wt-table th{text-align:left;padding:6px 12px 8px 0;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp-muted-light);border-bottom:1.5px solid var(--cp-sky);}
+.wt-table th.r,.wt-table td.r{text-align:right;padding:10px 12px;}
+.wt-table td{padding:10px 12px 10px 0;border-bottom:1px solid var(--cp-sky);vertical-align:middle;}
+.wt-badge{font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:6px;display:inline-block;}
+.wt-latest{background:var(--cp-blue);color:white;}
+.wt-partial{background:var(--cp-warning);color:var(--cp-navy);}
+.ad-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px;}
+.ad-table th{text-align:left;padding:6px 10px 8px 0;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp-muted-light);border-bottom:1.5px solid var(--cp-sky);}
+.ad-table th.r{text-align:right;}
+.ad-table td{padding:9px 10px 9px 0;border-bottom:1px solid var(--cp-sky);vertical-align:middle;font-size:12px;color:var(--cp-black);}
+.ad-table td.r{text-align:right;padding:9px 10px;}
+.ad-table tr:last-child td{border-bottom:none;}
+.ad-best{background:rgba(18,183,101,0.06);}
+.ad-worst{background:rgba(240,68,56,0.04);}
+.budget-bar-track{background:var(--cp-wheat-100);border-radius:6px;height:14px;overflow:hidden;position:relative;margin-top:8px;}
+.budget-bar-fill{height:100%;background:linear-gradient(90deg,var(--cp-blue),#3A79D6);border-radius:6px;}
+.budget-bar-lbl{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:10px;font-weight:700;color:var(--cp-muted);}
+.paid-kgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:7px;margin-bottom:14px;}
+.page-footer{position:fixed;bottom:0;left:0;right:0;background:var(--cp-white);border-top:1px solid var(--cp-sky);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;}
+.footer-logo{display:flex;align-items:center;gap:8px;}
+.footer-logo-mark{width:20px;height:20px;background:var(--cp-blue);border-radius:4px;display:flex;align-items:center;justify-content:center;}
+.footer-logo-text{font-size:13px;font-weight:700;color:var(--cp-blue);}
+.footer-text{font-size:11px;color:var(--cp-muted-light);}
+@media(max-width:680px){.g2{grid-template-columns:1fr;}.page{padding:32px 16px 100px;}.tab-btn{padding:12px 14px;font-size:12px;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-top">
+      <div class="header-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 18 18" fill="none"><rect x="2" y="2" width="14" height="14" rx="3" fill="white" fill-opacity="0.25"/><path d="M9 4.5C6.51 4.5 4.5 6.51 4.5 9s2.01 4.5 4.5 4.5 4.5-2.01 4.5-4.5S11.49 4.5 9 4.5zm0 7.5c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z" fill="white"/><circle cx="9" cy="9" r="1.5" fill="white"/></svg>
+        </div>
+        <span class="logo-wordmark">ClarityPay</span>
+      </div>
+      <div class="header-meta">LinkedIn Analytics · Internal<br>Updated weekly · Q2 2026</div>
+    </div>
+    <h1 class="page-title">LinkedIn Analytics Dashboard</h1>
+    <p class="page-sub">Weekly performance tracker · All organic · Q2 2026</p>
+  </div>
+
+  <div class="tab-bar" id="tab-bar"></div>
+  <div id="tab-panels"></div>
+
+</div>
+
+<div class="page-footer">
+  <div class="footer-logo">
+    <div class="footer-logo-mark"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" stroke="white" stroke-width="1.5"/><circle cx="6" cy="6" r="1.5" fill="white"/></svg></div>
+    <span class="footer-logo-text">ClarityPay</span>
+  </div>
+  <div class="footer-text">LinkedIn Analytics · Internal · Q2 2026</div>
+  <div class="footer-text">© 2025 ClarityPay Program Services, LLC. All Rights Reserved.</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// WEEKLY DATA — add a new object each Monday
+// ═══════════════════════════════════════════
+const weeks = [
+  {
+    id:'w1', label:'Apr 19–25', partial:false,
+    kpis:{
+      pageViews:        {val:'464',   sub:'Apr 19–25'},
+      uniqueVisitors:   {val:'176',   sub:'Apr 19–25'},
+      newFollowers:     {val:'+15',   sub:'All organic', delta:'▼ 21.1% vs prior week', deltaDir:'down'},
+      visitorFollow:    {val:'8.5%',  sub:'15 of 176 visitors'},
+      pageSearches:     {val:'1,207', sub:'Apr 21–27'},
+      totalFollowers:   {val:'2,757', sub:'As of Apr 30'},
+      totalPosts:       {val:'1',     sub:'Apr 19–25'},
+      engagementRate:   {val:'11.5%', sub:'Apr 19–25'},
+      engagementMetrics:{val:'48',    sub:'Apr 19–25', delta:'▲ 84.6% vs prior week', deltaDir:'up'},
+    },
+    industries:[
+      {n:'Financial Services',              p:'46.3%',v:215},
+      {n:'Software Development',            p:'9.7%', v:45},
+      {n:'Staffing and Recruiting',         p:'8%',   v:37},
+      {n:'Tech, Info & Internet',           p:'6%',   v:28},
+      {n:'Human Resources Services',        p:'5%',   v:23},
+      {n:'Banking',                         p:'4.1%', v:19},
+      {n:'Business Consulting',             p:'3.9%', v:18},
+      {n:'Higher Education',               p:'3.7%', v:17},
+      {n:'IT Services & Consulting',        p:'2.8%', v:13},
+      {n:'Venture Capital & Private Equity',p:'2.4%', v:11},
+      {n:'Insurance',                       p:'2.4%', v:11},
+      {n:'Advertising Services',            p:'1.9%', v:9},
+      {n:'Health and Human Services',       p:'1.7%', v:8},
+      {n:'Water, Waste & Air Conditioning', p:'1.7%', v:8},
+      {n:'Telecommunications',              p:'1.7%', v:8},
+      {n:'Printing Services',               p:'1.7%', v:8},
+    ],
+    jobFunctions:[
+      {n:'Business Development',v:89, p:'19.2%'},
+      {n:'Consulting',          v:23, p:'5%'},
+      {n:'Engineering',         v:22, p:'4.7%'},
+      {n:'Finance',             v:22, p:'4.7%'},
+      {n:'Human Resources',     v:9,  p:'1.9%'},
+      {n:'Accounting',          v:8,  p:'1.7%'},
+      {n:'Others',              v:291,p:'62.7%'},
+    ],
+    seniority:[
+      {l:'Senior',  v:94, p:'20.3%'},
+      {l:'Manager', v:62, p:'13.4%'},
+      {l:'Director',v:58, p:'12.5%'},
+      {l:'VP',      v:28, p:'6%'},
+      {l:'Entry',   v:26, p:'5.6%'},
+      {l:'Owner',   v:10, p:'2.2%'},
+      {l:'Partner', v:0,  p:'<1%'},
+      {l:'Others',  v:186,p:'40.1%'},
+    ],
+    searcherCompanies:[
+      {name:'Splitit',          desc:'Pay-later',                     bg:'#FEE2E2',color:'#B91C1C'},
+      {name:'EXL',              desc:'Analytics & operations',         bg:'#EDF9FF',color:'#075FDC'},
+      {name:'ClarityPay',       desc:'Internal traffic',               bg:'#075FDC',color:'#FFFFFF',highlight:true},
+      {name:'Chowder',          desc:'Lease-to-own · home improvement',bg:'#F1F7FD',color:'#1E2D4D'},
+      {name:'The Aspect Group', desc:'Airlines industry',              bg:'#F1F7FD',color:'#1E2D4D'},
+    ],
+    notableFollowers:[
+      {name:'Sam Argyle',            title:'Managing Director · Alternative Airlines (UK)'},
+      {name:'Frank Lynch',           title:'Sales Director, Travel & Entertainment · Worldpay'},
+      {name:'Jose Antonio Coimbra',  title:'Business Development · Worldline | Aviation · Payments · Attended ARC Forum'},
+      {name:'Aleem Mulani',          title:'Team Leader · TripHobo (India)'},
+    ],
+    companies:[
+      {name:'Worldpay',           person:'Frank Lynch · Sales Director, Travel & Entertainment', style:'',
+       details:[['HQ','US / Global'],['Scale','40B+ txns/yr · 146 countries · 126 currencies'],['Airlines','100+ airlines incl. Emirates, United, BA, Southwest'],['Pay Later','Point-of-sale financing went mainstream in airlines — 31+ carriers in 2025']]},
+      {name:'Worldline',          person:'Jose Antonio Coimbra · BD — Aviation, Hospitality, Payments', style:'',
+       details:[['HQ','Paris, France (Euronext: WLN)'],['Scale','22B+ txns/yr · global payments leader'],['Travel','TravelHub · 150+ payment methods · GDS integrations'],['Pay Later','Already live via Fly Now Pay Later in TravelHub'],['Context','Jose attended ARC Payments Forum with ClarityPay']]},
+      {name:'Alternative Airlines', person:'Sam Argyle · Managing Director', style:'medium',
+       details:[['HQ','United Kingdom (FCA regulated)'],['Scale','600+ airlines · 40+ payment methods · 160+ currencies'],['Pay Later','Core differentiator — 20+ pay-later partners incl. Klarna, Affirm, Zip'],['Model','Pay-later aggregator for flights globally']]},
+      {name:'TripHobo',           person:'Aleem Mulani · Team Leader', style:'watch',
+       details:[['HQ','Pune, India'],['Scale','Series B · $6.73M raised · 600K+ itineraries'],['Revenue','~$330K USD (Mar 2025) — growth stage'],['Fit','Hotel & flight booking flows — natural financing integration point']]},
+    ],
+  },
+  {
+    id:'w2', label:'Apr 26–May 2', partial:false,
+    showFollowers:false, showCompanies:false,
+    kpis:{
+      pageViews:        {val:'533',   sub:'Apr 26–May 2', delta:'▲ 14.9% vs prior week', deltaDir:'up'},
+      uniqueVisitors:   {val:'199',   sub:'Apr 26–May 2', delta:'▲ 13.1% vs prior week', deltaDir:'up'},
+      newFollowers:     {val:'+17',   sub:'All organic',  delta:'▲ 13.3% vs prior week', deltaDir:'up'},
+      visitorFollow:    {val:'8.5%',  sub:'17 of 199 visitors', delta:'→ No change vs prior week', deltaDir:''},
+      pageSearches:     {val:'1,292', sub:'Apr 26–May 2', delta:'▲ 7% vs prior week',    deltaDir:'up'},
+      totalFollowers:   {val:'2,764', sub:'As of May 2',  delta:'▲ 0.3% vs prior week',  deltaDir:'up'},
+      totalPosts:       {val:'0',     sub:'Apr 26–May 2', delta:'▼ 100% vs prior week',  deltaDir:'down'},
+      engagementRate:   {val:'7%',    sub:'Apr 26–May 2', delta:'▼ 39.1% vs prior week', deltaDir:'down'},
+      engagementMetrics:{val:'13',    sub:'Apr 26–May 2', delta:'▼ 72.9% vs prior week', deltaDir:'down'},
+    },
+    industries:[
+      {n:'Financial Services',              p:'37.3%',v:199},
+      {n:'IT Services & Consulting',        p:'12%',  v:64},
+      {n:'Software Development',            p:'9.4%', v:50},
+      {n:'Staffing and Recruiting',         p:'7.9%', v:42},
+      {n:'Tech, Info & Internet',           p:'7.9%', v:42},
+      {n:'Higher Education',               p:'4.7%', v:25},
+      {n:'Business Consulting',             p:'3.4%', v:18},
+      {n:'Human Resources Services',        p:'3.4%', v:18},
+      {n:'Banking',                         p:'2.8%', v:15},
+      {n:'Data Infrastructure & Analytics', p:'2.4%', v:13},
+      {n:'Venture Capital & Private Equity',p:'2.4%', v:13},
+      {n:'Retail',                          p:'1.9%', v:10},
+      {n:'Tech, Info & Media',              p:'1.9%', v:10},
+      {n:'Hospitals and Health Care',       p:'1.7%', v:9},
+      {n:'Others',                          p:'<1%',  v:5},
+    ],
+    jobFunctions:[
+      {n:'Business Development',v:61, p:'11.4%'},
+      {n:'Engineering',         v:30, p:'5.6%'},
+      {n:'Entrepreneurship',    v:12, p:'2.3%'},
+      {n:'Sales',               v:11, p:'2.1%'},
+      {n:'Human Resources',     v:10, p:'1.9%'},
+      {n:'Marketing',           v:9,  p:'1.7%'},
+      {n:'Finance',             v:0,  p:'<1%'},
+      {n:'Others',              v:400,p:'75%'},
+    ],
+    seniority:[
+      {l:'Senior',   v:142,p:'26.6%'},
+      {l:'Director', v:63, p:'11.8%'},
+      {l:'VP',       v:61, p:'11.4%'},
+      {l:'Entry',    v:49, p:'9.2%'},
+      {l:'Partner',  v:16, p:'3%'},
+      {l:'Manager',  v:11, p:'2.1%'},
+      {l:'CXO',      v:8,  p:'1.5%'},
+      {l:'Others',   v:183,p:'34.3%'},
+    ],
+    searcherCompanies:[
+      {name:'ClarityPay',       desc:'Internal traffic',               bg:'#075FDC',color:'#FFFFFF',highlight:true},
+      {name:'Splitit',          desc:'Pay-later',                     bg:'#FEE2E2',color:'#B91C1C'},
+      {name:'Synchrony',        desc:'Consumer financial services',    bg:'#EDF9FF',color:'#075FDC'},
+      {name:'Concord Advice',   desc:'Financial advisory',             bg:'#F1F7FD',color:'#1E2D4D'},
+      {name:'ON1 Brands',       desc:'',               bg:'#F1F7FD',color:'#1E2D4D'},
+    ],
+    notableFollowers:[],
+    companies:[
+      {name:'Worldpay',           person:'Frank Lynch · Sales Director, Travel & Entertainment', style:'',
+       details:[['HQ','US / Global'],['Scale','40B+ txns/yr · 146 countries · 126 currencies'],['Airlines','100+ airlines incl. Emirates, United, BA, Southwest'],['Pay Later','Point-of-sale financing went mainstream in airlines — 31+ carriers in 2025']]},
+      {name:'Worldline',          person:'Jose Antonio Coimbra · BD — Aviation, Hospitality, Payments', style:'',
+       details:[['HQ','Paris, France (Euronext: WLN)'],['Scale','22B+ txns/yr · global payments leader'],['Travel','TravelHub · 150+ payment methods · GDS integrations'],['Pay Later','Already live via Fly Now Pay Later in TravelHub'],['Context','Jose attended ARC Payments Forum with ClarityPay']]},
+      {name:'Alternative Airlines', person:'Sam Argyle · Managing Director', style:'medium',
+       details:[['HQ','United Kingdom (FCA regulated)'],['Scale','600+ airlines · 40+ payment methods · 160+ currencies'],['Pay Later','Core differentiator — 20+ pay-later partners incl. Klarna, Affirm, Zip'],['Model','Pay-later aggregator for flights globally']]},
+      {name:'TripHobo',           person:'Aleem Mulani · Team Leader', style:'watch',
+       details:[['HQ','Pune, India'],['Scale','Series B · $6.73M raised · 600K+ itineraries'],['Revenue','~$330K USD (Mar 2025) — growth stage'],['Fit','Hotel & flight booking flows — natural financing integration point']]},
+    ],
+    paidAds:{
+      campaign:'ARC Recap TL Post — Adrian + Chris — Travel + Leisure Audience',
+      objective:'Engagement', costType:'CPM', budget:'$1,500.00', spent:'$301.05',
+      period:'Apr 30–May 2, 2026',
+      totals:{impressions:1432, clicks:17, engagements:23, ctr:'1.19%', er:'1.61%', cpm:'$210.23', leads:0},
+      ads:[
+        {name:'Brand Handle Recap – Adrian Image', id:'1285532014', impressions:435, clicks:3, ctr:'0.69%', er:'0.69%', spent:'$86.66', reactions:0, comments:0, shares:0, follows:1, leads:0, dwellTime:'4.77s', postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455651682371321857-zeJi'},
+        {name:'Chris Amenechi Thought Leadership', id:'1286031174', impressions:377, clicks:8, ctr:'2.12%', er:'2.92%', spent:'$76.45', reactions:0, comments:0, shares:0, follows:0, leads:0, dwellTime:'6.05s', postUrl:'https://www.linkedin.com/posts/camenechilive2021_arcpaymentsforum-airlinepayments-share-7454919007180271616-MsLU'},
+        {name:'Brand Handle Recap – Chris Image',  id:'1285033304', impressions:254, clicks:3, ctr:'1.18%', er:'1.18%', spent:'$56.46', reactions:1, comments:0, shares:0, follows:0, leads:0, dwellTime:'4.69s', postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455651804450652160-xjTZ'},
+        {name:'Brand Handle – Chris Copy',         id:'1286829454', impressions:168, clicks:1, ctr:'0.60%', er:'1.19%', spent:'$38.82', reactions:0, comments:0, shares:0, follows:0, leads:0, dwellTime:'4.43s', postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455650941699174400-5uNH'},
+        {name:'Brand Handle – Adrian Copy',        id:'1286031184', impressions:104, clicks:0, ctr:'0.00%', er:'0.00%', spent:'$24.62', reactions:0, comments:0, shares:0, follows:0, leads:0, dwellTime:'4.29s', postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455649486183440384-hrmU'},
+        {name:'Adrian Brown Thought Leadership',   id:'1285731514', impressions:94,  clicks:2, ctr:'2.13%', er:'4.26%', spent:'$18.04', reactions:0, comments:0, shares:0, follows:0, leads:0, dwellTime:'7.79s', postUrl:'https://www.linkedin.com/posts/adrian-b-b486287_arcpaymentsforum-share-7454896159334150145-xV89'},
+      ],
+    },
+  },
+  {
+    id:'w3', label:'May 3–9', partial:false,
+    showFollowers:false, showCompanies:false,
+    kpis:{
+      pageViews:        {val:'504',   sub:'May 3–9',  delta:'▼ 5.4% vs prior week',   deltaDir:'down'},
+      uniqueVisitors:   {val:'184',   sub:'May 3–9',  delta:'▼ 7.5% vs prior week',   deltaDir:'down'},
+      newFollowers:     {val:'+16',   sub:'May 3–9',  delta:'▼ 5.9% vs prior week',   deltaDir:'down'},
+      visitorFollow:    {val:'8.7%',  sub:'16 of 184 visitors', delta:'▲ 0.2% vs prior week', deltaDir:'up'},
+      pageSearches:     {val:'1,631', sub:'May 3–9',  delta:'▲ 26.2% vs prior week',  deltaDir:'up'},
+      totalFollowers:   {val:'2,778', sub:'As of May 9'},
+      totalPosts:       {val:'2',     sub:'May 3–9'},
+      engagementRate:   {val:'5.1%',  sub:'May 3–9',  delta:'▼ 27.1% vs prior week',  deltaDir:'down'},
+      engagementMetrics:{val:'44',    sub:'May 3–9',  delta:'▲ 238.5% vs prior week', deltaDir:'up'},
+    },
+    industries:[
+      {n:'Financial Services',       p:'32.1%', v:162},
+      {n:'Tech, Info & Internet',     p:'14.3%', v:72},
+      {n:'Software Development',      p:'13.9%', v:70},
+      {n:'IT Services & Consulting',  p:'13.3%', v:67},
+      {n:'Advertising Services',      p:'7.7%',  v:39},
+      {n:'Higher Education',         p:'7.5%',  v:38},
+      {n:'Staffing and Recruiting',   p:'5.4%',  v:27},
+      {n:'Tech, Info & Media',        p:'4.4%',  v:22},
+      {n:'Investment Management',     p:'3.2%',  v:16},
+      {n:'Data Infrastructure',       p:'2.6%',  v:13},
+      {n:'Marketing Services',        p:'1.8%',  v:9},
+      {n:'Consumer Services',         p:'1.8%',  v:9},
+    ],
+    jobFunctions:[
+      {n:'Business Development',          v:68, p:'13.5%'},
+      {n:'Human Resources',               v:59, p:'11.7%'},
+      {n:'Information Technology',        v:57, p:'11.3%'},
+      {n:'Engineering',                   v:57, p:'11.3%'},
+      {n:'Sales',                         v:47, p:'9.3%'},
+      {n:'Finance',                       v:46, p:'9.1%'},
+      {n:'Product Management',            v:30, p:'6%'},
+      {n:'Research',                      v:27, p:'5.4%'},
+      {n:'Customer Success & Support',    v:20, p:'4%'},
+      {n:'Accounting',                    v:19, p:'3.8%'},
+      {n:'Consulting',                    v:19, p:'3.8%'},
+      {n:'Education',                     v:15, p:'3%'},
+      {n:'Marketing',                     v:10, p:'2%'},
+      {n:'Operations',                    v:9,  p:'1.8%'},
+      {n:'Arts and Design',               v:8,  p:'1.6%'},
+      {n:'Entrepreneurship',              v:8,  p:'1.6%'},
+      {n:'Prog. & Project Management',    v:8,  p:'1.6%'},
+      {n:'Legal',                         v:7,  p:'1.4%'},
+      {n:'Healthcare Services',           v:6,  p:'1.2%'},
+      {n:'Others',                        v:12, p:'<1%'},
+    ],
+    seniority:[
+      {l:'Senior',   v:168, p:'33.3%'},
+      {l:'Entry',    v:164, p:'32.5%'},
+      {l:'Director', v:53,  p:'10.5%'},
+      {l:'VP',       v:45,  p:'8.9%'},
+      {l:'Manager',  v:44,  p:'8.7%'},
+      {l:'CXO',      v:22,  p:'4.4%'},
+      {l:'Owner',    v:14,  p:'2.8%'},
+      {l:'Training', v:13,  p:'2.6%'},
+      {l:'Partner',  v:9,   p:'1.8%'},
+    ],
+    searcherCompanies:[
+      {name:'ClarityPay', desc:'', bg:'#075FDC', color:'#FFFFFF', highlight:true},
+      {name:'Affirm',     desc:'', bg:'#EDF9FF', color:'#075FDC'},
+      {name:'Skeps',      desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Capital One',desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'DR Bank',    desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+    ],
+    searcherJobTitles:[
+      {n:'Software Engineer',       p:'4.2%'},
+      {n:'Product Manager',         p:'2.3%'},
+      {n:'Founder',                 p:'2.2%'},
+      {n:'Business Manager',        p:'1.6%'},
+      {n:'Vice President Marketing',p:'1.4%'},
+    ],
+    searcherIndustries:[
+      {n:'Financial Services',       p:'18.9%', v:189},
+      {n:'Software Development',     p:'6%',    v:60},
+      {n:'IT Services & Consulting', p:'4.5%',  v:45},
+      {n:'Credit Intermediation',    p:'4.3%',  v:43},
+      {n:'Banking',                  p:'4.2%',  v:42},
+    ],
+    notableFollowers:[],
+    companies:[],
+    paidAds:{
+      campaign:'ARC Recap TL Post — Adrian + Chris — Travel + Leisure Audience',
+      objective:'Engagement', costType:'CPM', budget:'$1,500.00', spent:'$907.97',
+      period:'Campaign to date (Apr 30–May 9)',
+      totals:{impressions:4210, clicks:48, engagements:58, ctr:'1.14%', er:'1.38%', cpm:'', leads:0},
+      ads:[
+        {name:'Chris Amenechi Thought Leadership', id:'1286031174', impressions:1383, clicks:21, ctr:'1.52%', er:'2.02%', spent:'$310.64', dwellTime:'6.09s', paused:false, postUrl:'https://www.linkedin.com/posts/camenechilive2021_arcpaymentsforum-airlinepayments-share-7454919007180271616-MsLU'},
+        {name:'Adrian Brown Thought Leadership',   id:'1285731514', impressions:1277, clicks:15, ctr:'1.17%', er:'1.33%', spent:'$287.07', dwellTime:'5.87s', paused:false, postUrl:'https://www.linkedin.com/posts/adrian-b-b486287_arcpaymentsforum-share-7454896159334150145-xV89'},
+        {name:'Brand Handle Recap – Adrian Image', id:'1285532014', impressions:555,  clicks:4,  ctr:'0.72%', er:'0.72%', spent:'$108.29', dwellTime:'4.70s', paused:false, postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455651682371321857-zeJi'},
+        {name:'Brand Handle Recap – Chris Image',  id:'1285033304', impressions:545,  clicks:5,  ctr:'0.92%', er:'0.92%', spent:'$105.97', dwellTime:'5.70s', paused:false, postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455651804450652160-xjTZ'},
+        {name:'Brand Handle – Adrian Copy',        id:'1286031184', impressions:234,  clicks:2,  ctr:'0.85%', er:'0.85%', spent:'$48.27',  dwellTime:'4.27s', paused:false, postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455649486183440384-hrmU'},
+        {name:'Brand Handle – Chris Copy',         id:'1286829454', impressions:216,  clicks:1,  ctr:'0.46%', er:'0.93%', spent:'$47.74',  dwellTime:'4.45s', paused:true,  postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455650941699174400-5uNH'},
+      ],
+    },
+  },
+  {
+    id:'w4', label:'May 10–16', partial:false,
+    showFollowers:false, showCompanies:false,
+    kpis:{
+      pageViews:        {val:'781',   sub:'May 10–16', delta:'▲ 54.9% vs prior week',  deltaDir:'up'},
+      uniqueVisitors:   {val:'317',   sub:'May 10–16', delta:'▲ 72.3% vs prior week',  deltaDir:'up'},
+      newFollowers:     {val:'+50',   sub:'May 10–16', delta:'▲ 212.5% vs prior week', deltaDir:'up'},
+      visitorFollow:    {val:'15.8%', sub:'50 of 317 visitors', delta:'▲ 7.1% vs prior week', deltaDir:'up'},
+      pageSearches:     {val:'2,009', sub:'May 10–16', delta:'▲ 23.2% vs prior week',  deltaDir:'up'},
+      totalFollowers:   {val:'2,825', sub:'As of May 16'},
+      totalPosts:       {val:'1',     sub:'May 10–16', delta:'▼ 50% vs prior week',    deltaDir:'down'},
+      engagementRate:   {val:'9.6%',  sub:'May 10–16', delta:'▲ 88.2% vs prior week',  deltaDir:'up'},
+      engagementMetrics:{val:'93',    sub:'May 10–16', delta:'▲ 111.4% vs prior week', deltaDir:'up'},
+    },
+    industries:[
+      {n:'Financial Services',              p:'65.6%', v:512},
+      {n:'Software Development',            p:'11.8%', v:92},
+      {n:'IT Services & Consulting',        p:'7.4%',  v:58},
+      {n:'Tech, Info & Internet',           p:'7.3%',  v:57},
+      {n:'Staffing and Recruiting',         p:'5.6%',  v:44},
+      {n:'Banking',                         p:'3.5%',  v:27},
+      {n:'Business Consulting',             p:'3.3%',  v:26},
+      {n:'Retail',                          p:'3.1%',  v:24},
+      {n:'Higher Education',               p:'1.8%',  v:14},
+      {n:'Accounting',                      p:'1.7%',  v:13},
+      {n:'Data Infrastructure & Analytics', p:'1.7%',  v:13},
+      {n:'Hospitals and Health Care',       p:'1.4%',  v:11},
+      {n:'Non-profit Organizations',        p:'1.3%',  v:10},
+      {n:'Advertising Services',            p:'1.3%',  v:10},
+      {n:'Government Administration',       p:'1.3%',  v:10},
+      {n:'Real Estate',                     p:'1.2%',  v:9},
+      {n:'Professional Services',           p:'1.2%',  v:9},
+      {n:'Marketing Services',              p:'1.2%',  v:9},
+    ],
+    jobFunctions:[
+      {n:'Sales',                        v:150, p:'19.2%'},
+      {n:'Business Development',         v:140, p:'17.9%'},
+      {n:'Finance',                      v:131, p:'16.8%'},
+      {n:'Engineering',                  v:88,  p:'11.3%'},
+      {n:'Information Technology',       v:61,  p:'7.8%'},
+      {n:'Marketing',                    v:40,  p:'5.1%'},
+      {n:'Accounting',                   v:39,  p:'5%'},
+      {n:'Operations',                   v:31,  p:'4%'},
+      {n:'Research',                     v:28,  p:'3.6%'},
+      {n:'Product Management',           v:28,  p:'3.6%'},
+      {n:'Consulting',                   v:23,  p:'2.9%'},
+      {n:'Human Resources',              v:21,  p:'2.7%'},
+      {n:'Prog. & Project Management',   v:21,  p:'2.7%'},
+      {n:'Education',                    v:20,  p:'2.6%'},
+      {n:'Customer Success & Support',   v:16,  p:'2%'},
+      {n:'Administrative',               v:16,  p:'2%'},
+      {n:'Entrepreneurship',             v:13,  p:'1.7%'},
+      {n:'Media and Communication',      v:9,   p:'1.2%'},
+      {n:'Others',                       v:5,   p:'<1%'},
+    ],
+    seniority:[
+      {l:'Senior',   v:328, p:'42%'},
+      {l:'Entry',    v:190, p:'24.3%'},
+      {l:'VP',       v:120, p:'15.4%'},
+      {l:'Manager',  v:117, p:'15%'},
+      {l:'Director', v:77,  p:'9.9%'},
+      {l:'CXO',      v:41,  p:'5.2%'},
+      {l:'Partner',  v:30,  p:'3.8%'},
+      {l:'Owner',    v:17,  p:'2.2%'},
+      {l:'Training', v:15,  p:'1.9%'},
+    ],
+    searcherCompanies:[
+      {name:'ClarityPay',                                          desc:'', bg:'#075FDC', color:'#FFFFFF', highlight:true},
+      {name:'College of Natural Sciences, UT Austin',              desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Affirm',                                              desc:'', bg:'#EDF9FF', color:'#075FDC'},
+      {name:'Skeps',                                               desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'LendingPoint™',                                       desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+    ],
+    searcherJobTitles:[
+      {n:'Software Engineer',  p:'8.2%'},
+      {n:'Teaching Assistant', p:'1.5%'},
+      {n:'Founder',            p:'1.4%'},
+      {n:'Co-Founder',         p:'1.1%'},
+      {n:'Business Analyst',   p:'1.1%'},
+    ],
+    searcherIndustries:[
+      {n:'Financial Services',       p:'16.2%', v:162},
+      {n:'Software Development',     p:'7.7%',  v:77},
+      {n:'IT Services & Consulting', p:'5.2%',  v:52},
+      {n:'Tech, Info & Internet',    p:'4.7%',  v:47},
+      {n:'Credit Intermediation',    p:'3.6%',  v:36},
+    ],
+    notableFollowers:[],
+    companies:[],
+    featuredPost:{
+      title:'New Hire Announcement — Melissa Muncy',
+      url:'https://www.linkedin.com/posts/were-thrilled-to-welcome-melissa-muncy-share-7460082441702219776-NXYj',
+      type:'Organic',
+      metrics:{
+        impressions:2455, membersReached:1512, pageViewers:54,
+        followersGained:6, engagement:328, engagementRate:'13.4%',
+        clicks:244, ctr:'9.9%',
+      },
+    },
+    paidAds:{
+      campaign:'ARC Recap TL Post — Adrian + Chris — Travel + Leisure Audience',
+      objective:'Engagement', costType:'CPM', budget:'$1,500', spent:'$1,500',
+      period:'Campaign to date (Apr 30–May 16)',
+      totals:{impressions:6667, clicks:77, engagements:91, ctr:'1.15%', er:'1.36%', cpm:'', leads:0},
+      ads:[
+        {name:'Chris Amenechi Thought Leadership', id:'1286031174', impressions:2774, clicks:39, ctr:'1.41%', er:'1.77%', spent:'$661.99', dwellTime:'5.52s', paused:false, postUrl:'https://www.linkedin.com/posts/camenechilive2021_arcpaymentsforum-airlinepayments-share-7454919007180271616-MsLU'},
+        {name:'Adrian Brown Thought Leadership',   id:'1285731514', impressions:1822, clicks:22, ctr:'1.21%', er:'1.37%', spent:'$414.64', dwellTime:'5.53s', paused:false, postUrl:'https://www.linkedin.com/posts/adrian-b-b486287_arcpaymentsforum-share-7454896159334150145-xV89'},
+        {name:'Brand Handle Recap – Chris Image',  id:'1285033304', impressions:776,  clicks:7,  ctr:'0.90%', er:'0.90%', spent:'$157.70', dwellTime:'5.31s', paused:false, postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455651804450652160-xjTZ'},
+        {name:'Brand Handle Recap – Adrian Image', id:'1285532014', impressions:600,  clicks:4,  ctr:'0.67%', er:'0.67%', spent:'$120.08', dwellTime:'4.56s', paused:false, postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455651682371321857-zeJi'},
+        {name:'Brand Handle – Adrian Copy',        id:'1286031184', impressions:479,  clicks:4,  ctr:'0.84%', er:'0.84%', spent:'$97.85',  dwellTime:'4.45s', paused:false, postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455649486183440384-hrmU'},
+        {name:'Brand Handle – Chris Copy',         id:'1286829454', impressions:216,  clicks:1,  ctr:'0.46%', er:'0.93%', spent:'$47.74',  dwellTime:'4.45s', paused:true,  postUrl:'https://www.linkedin.com/posts/connect-pay-later-to-your-loyalty-strategy-share-7455650941699174400-5uNH'},
+      ],
+    },
+  },
+  // ── Add next week below ──
+  // { id:'w5', label:'May 17–23', partial:false, kpis:{...}, ... },
+];
+
+// ═══════════════════════════════════════════
+// WEEKLY TRACKER
+// ═══════════════════════════════════════════
+const weeklyTracker = [
+  {label:'Apr 19–25',    gained:15, total:2742},
+  {label:'Apr 26–May 2', gained:17, total:2759},
+  {label:'May 3–9',      gained:16, total:2775},
+  {label:'May 10–16',    gained:50, total:2825},
+];
+
+const CURRENT_FOLLOWERS = 2825;
+const TARGET = 3000;
+const Q2_END = new Date('2026-06-30');
+
+// Brand colors
+const CB='#075FDC',CN='#1E2D4D',CS='#253F70',CY='#C6E0F7';
+const SEN_C=['#075FDC','#253F70','#1E2D4D','#3A79D6','#71B1E9','#C6E0F7','#A2DFC1','#D1D1D1'];
+
+// ═══════════════════════════════════════════
+// TAB RENDERING
+// ═══════════════════════════════════════════
+const tabBar    = document.getElementById('tab-bar');
+const tabPanels = document.getElementById('tab-panels');
+const chartInst = {};
+
+weeks.forEach((w,wi) => {
+  const isLast = wi===weeks.length-1;
+  const btn = document.createElement('button');
+  btn.className = 'tab-btn'+(isLast?' active':'');
+  btn.textContent = w.label+(w.partial?' (partial)':'');
+  btn.dataset.tab = w.id;
+  btn.onclick = ()=>switchTab(w.id);
+  tabBar.appendChild(btn);
+
+  const panel = document.createElement('div');
+  panel.id = 'panel-'+w.id;
+  panel.className = 'tab-panel'+(isLast?' active':'');
+  panel.innerHTML = buildPanel(w);
+  tabPanels.appendChild(panel);
+});
+
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+id));
+  initCharts(id);
+}
+
+// ═══════════════════════════════════════════
+// BUILD PANEL
+// ═══════════════════════════════════════════
+function buildPanel(w){
+  const k=w.kpis;
+
+  const kpi=(label,d,vc='')=>`
+    <div class="kpi">
+      <div class="klbl">${label}</div>
+      <div class="kval ${vc}">${d.val}</div>
+      ${d.delta?`<div class="kdelta ${d.deltaDir}">${d.delta}</div>`:`<div class="ksub">${d.sub}</div>`}
+    </div>`;
+
+  const bar=(lbl,pw,pLabel,color,lc='bl')=>
+    `<div class="br"><span class="${lc}" title="${lbl}">${lbl}</span><div class="bt"><div class="bf" style="width:${pw}%;background:${color};"></div></div><span class="bv">${pLabel}</span></div>`;
+
+  const maxInd=w.industries[0].v;
+  const indBars=w.industries.map(d=>bar(d.n,Math.round(d.v/maxInd*100),d.p,CB)).join('');
+
+  const maxFn=w.jobFunctions.filter(d=>d.n!=='Others').reduce((a,b)=>a.v>b.v?a:b).v;
+  const fnBars=w.jobFunctions.map(d=>{
+    const isO=d.n==='Others';
+    return bar(d.n,isO?100:Math.round(d.v/maxFn*100),d.p,isO?CY:CN,'bl-sm');
+  }).join('');
+
+  const senLeg=w.seniority.map((d,i)=>
+    `<span><span class="sen-dot" style="background:${SEN_C[i]||'#ccc'};"></span>${d.l} ${d.p}</span>`).join('');
+
+  const tiles=w.searcherCompanies.map(c=>`
+    <div class="ctile" ${c.highlight?'style="border-color:var(--cp-blue);"':''}>
+      <div class="ctile-av" style="background:${c.bg};color:${c.color};">${c.name[0]}</div>
+      <div>
+        <div class="ctile-name" ${c.highlight?'style="color:var(--cp-blue);"':''}>${c.name}</div>
+        <div class="ctile-desc">${c.desc}</div>
+      </div>
+    </div>`).join('');
+
+  const followers=w.notableFollowers.length>0
+    ? w.notableFollowers.map(f=>`<div class="fc"><div class="fcn">${f.name}</div><div class="fct">${f.title}</div></div>`).join('')
+    : '<div style="font-size:12px;color:var(--cp-muted-light);font-style:italic;padding:8px 0;">No notable travel or aviation followers identified this week.</div>';
+
+  const companies=w.companies.map(c=>`
+    <div class="cc ${c.style}">
+      <div class="ccname">${c.name}</div>
+      <div class="ccperson">${c.person}</div>
+      <div class="ccg">${c.details.map(([k,v])=>`<div class="ccr"><span class="cck">${k}</span><span class="ccv">${v}</span></div>`).join('')}</div>
+    </div>`).join('');
+
+  const pct=Math.min(100,(CURRENT_FOLLOWERS/TARGET*100)).toFixed(1);
+  const today=new Date();
+  const wl=Math.max(0,Math.ceil((Q2_END-today)/(7*24*60*60*1000)));
+  const needed=TARGET-CURRENT_FOLLOWERS;
+  const npw=wl>0?Math.ceil(needed/wl):'—';
+
+  const Q2_START_FOLLOWERS = 2683;
+  const Q2_INCREMENTAL_TARGET = 317;
+  const trackerRows=weeklyTracker.map((r,i)=>{
+    const q2gained = r.total - Q2_START_FOLLOWERS;
+    const rp=Math.min(100,(q2gained/Q2_INCREMENTAL_TARGET*100)).toFixed(1);
+    const isL=i===weeklyTracker.length-1;
+    const gc=r.gained>0?'color:var(--cp-success);':'color:var(--cp-muted-light);';
+    return `<tr style="${isL?'background:var(--cp-sky-tint);':''}">
+      <td style="font-weight:${isL?'600':'400'};color:var(--cp-black);">
+        ${r.label}
+        ${isL?'<span class="wt-badge wt-latest">Latest</span>':''}
+        ${r.partial?'<span class="wt-badge wt-partial">Partial week</span>':''}
+      </td>
+      <td class="r" style="font-weight:700;font-size:14px;${gc}">+${r.gained}</td>
+      <td class="r" style="font-weight:${isL?'600':'400'};">${r.total.toLocaleString()}</td>
+      <td style="padding:10px 0 10px 12px;width:38%;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="flex:1;background:var(--cp-wheat-100);border-radius:4px;height:8px;overflow:hidden;">
+            <div style="width:${rp}%;height:100%;background:linear-gradient(90deg,#075FDC,#3A79D6);border-radius:4px;"></div>
+          </div>
+          <span style="font-size:10px;color:var(--cp-muted-light);min-width:34px;text-align:right;">${rp}%</span>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  return `
+    <div class="slabel">${w.label} performance</div>
+    <div class="kgrid">
+      ${kpi('Page Views',k.pageViews,'blue')}
+      ${kpi('Unique Visitors',k.uniqueVisitors,'blue')}
+      ${kpi('New Followers',k.newFollowers,'up')}
+      ${kpi('Visitor → Follow',k.visitorFollow,'up')}
+      ${kpi('Page Searches',k.pageSearches,'blue')}
+      ${kpi('Total Followers',k.totalFollowers,'')}
+      ${kpi('Total Posts',k.totalPosts,'blue')}
+      ${kpi('Engagement Rate',k.engagementRate,'up')}
+      ${kpi('Engagement Metrics',k.engagementMetrics,'up')}
+    </div>
+
+    <div class="slabel">Q2 follower goal</div>
+    <div class="card">
+      ${(()=>{
+        const Q2_START = 2683;
+        const Q2_TARGET_INCREMENTAL = 317; // 3000 - 2683
+        const weekTotal = parseInt(w.kpis.totalFollowers.val.replace(',',''));
+        const q2Gained = weekTotal - Q2_START;
+        const q2Remaining = Math.max(0, Q2_TARGET_INCREMENTAL - q2Gained);
+        const q2Pct = Math.min(100, (q2Gained / Q2_TARGET_INCREMENTAL * 100)).toFixed(1);
+        const today = new Date();
+        const wl = Math.max(0, Math.ceil((Q2_END - today) / (7*24*60*60*1000)));
+        const npw = wl > 0 ? Math.ceil(q2Remaining / wl) : '—';
+        const milestones = [0, Math.round(Q2_TARGET_INCREMENTAL*0.25), Math.round(Q2_TARGET_INCREMENTAL*0.5), Math.round(Q2_TARGET_INCREMENTAL*0.75), Q2_TARGET_INCREMENTAL];
+        return `
+        <div class="ctitle">Target: 3,000 followers by end of Q2</div>
+        <div style="font-size:11px;color:var(--cp-muted-light);margin-top:3px;margin-bottom:14px;">
+          Q2 requires <strong style="color:var(--cp-black);">317 new followers</strong> (Apr 1–Jun 30) to hit 3,000 —
+          <strong style="color:var(--cp-blue);">+22% more incremental growth</strong> than Q1, which added 260 new followers.
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+          <div>
+            <div style="font-size:11px;color:var(--cp-muted-light);">Q2 new followers gained as of ${w.label}</div>
+            <div style="font-size:28px;font-weight:700;color:var(--cp-blue);letter-spacing:-0.02em;line-height:1.1;">${q2Gained} <span style="font-size:14px;color:var(--cp-muted-light);font-weight:400;">of ${Q2_TARGET_INCREMENTAL} needed</span></div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:11px;color:var(--cp-muted-light);">Total followers — ${w.label}</div>
+            <div style="font-size:22px;font-weight:700;color:var(--cp-black);letter-spacing:-0.02em;line-height:1.1;">${weekTotal.toLocaleString()}</div>
+            <div style="font-size:11px;color:var(--cp-error);font-weight:600;margin-top:1px;">${q2Remaining} still needed to reach 3,000</div>
+          </div>
+        </div>
+        <div style="margin-bottom:4px;display:flex;justify-content:space-between;font-size:10px;color:var(--cp-muted-light);">
+          <span>Q2 start: 2,683</span><span>${Q2_TARGET_INCREMENTAL} new followers needed</span>
+        </div>
+        <div class="goal-bar-track">
+          <div class="goal-bar-fill" id="gb-${w.id}" style="width:0%;"></div>
+          <div class="goal-bar-lbl">${Q2_TARGET_INCREMENTAL}</div>
+        </div>
+        <div class="goal-milestones">${milestones.map(m=>`<span>${m}</span>`).join('')}</div>
+        <div class="goal-stats">
+          <div class="gs"><div class="gs-lbl">Q2 progress</div><div class="gs-val blue" id="q2pct-${w.id}">${q2Pct}%</div><div class="gs-sub">of Q2 incremental goal</div></div>
+          <div class="gs"><div class="gs-lbl">Q2 gained</div><div class="gs-val">${q2Gained}</div><div class="gs-sub">new followers in Q2</div></div>
+          <div class="gs"><div class="gs-lbl">Still needed</div><div class="gs-val">${q2Remaining}</div><div class="gs-sub">to reach 3,000</div></div>
+          <div class="gs"><div class="gs-lbl">Weeks left in Q2</div><div class="gs-val">${wl}</div><div class="gs-sub">until Jun 30</div></div>
+          <div class="gs"><div class="gs-lbl">Needed / week</div><div class="gs-val">${npw}</div><div class="gs-sub">avg new followers</div></div>
+          <div class="gs"><div class="gs-lbl">vs Q1 growth</div><div class="gs-val" style="color:var(--cp-error);">+22%</div><div class="gs-sub">more growth required</div></div>
+        </div>`;
+      })()}
+    </div>
+
+    <div class="slabel">Top page searcher demographics <span class="slabel-note">— no date range available</span></div>
+    <div class="card">
+      <div class="ctitle">Top companies searching your page</div>
+      <div class="csub">No date range available for this data</div>
+      <div class="company-tiles">${tiles}</div>
+      ${w.searcherJobTitles && w.searcherJobTitles.length ? `
+      <div style="margin-top:16px;">
+        <div class="ctitle" style="margin-bottom:10px;">Top searcher job titles</div>
+        ${w.searcherJobTitles.map(d=>`<div class="br"><span class="bl" title="${d.n}">${d.n}</span><div class="bt"><div class="bf" style="width:${Math.round(parseFloat(d.p)/parseFloat(w.searcherJobTitles[0].p)*100)}%;background:${CN};"></div></div><span class="bv">${d.p}</span></div>`).join('')}
+      </div>` : ''}
+      ${w.searcherIndustries && w.searcherIndustries.length ? `
+      <div style="margin-top:16px;">
+        <div class="ctitle" style="margin-bottom:10px;">Top searcher industries</div>
+        ${w.searcherIndustries.map(d=>`<div class="br"><span class="bl" title="${d.n}">${d.n}</span><div class="bt"><div class="bf" style="width:${Math.round(d.v/w.searcherIndustries[0].v*100)}%;background:${CB};"></div></div><span class="bv">${d.p}</span></div>`).join('')}
+      </div>` : ''}
+    </div>
+
+    <div class="slabel">Visitor demographics <span class="slabel-note">— ${w.label}</span></div>
+    <div class="g2" style="margin-bottom:10px;">
+      <div class="card">
+        <div class="ctitle">Top industries</div>
+        <div class="csub">${w.label} · visitor data</div>
+        ${indBars}
+      </div>
+      <div class="card">
+        <div class="ctitle">Visitor job functions</div>
+        <div class="csub">${w.label} · visitor data</div>
+        ${fnBars}
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <div class="ctitle">Seniority breakdown</div>
+      <div class="csub">${w.label} · visitor data</div>
+      <div style="position:relative;height:220px;"><canvas id="sen-${w.id}" role="img" aria-label="Seniority for ${w.label}."></canvas></div>
+      <div class="sen-leg">${senLeg}</div>
+    </div>
+
+    ${w.showFollowers===false ? '' : `
+    <div class="slabel">Travel &amp; aviation follower spotlight</div>
+    <div class="card">
+      <div class="ctitle">Notable travel &amp; aviation followers — ${w.label}</div>
+      <div style="margin-top:12px;">${followers}</div>
+    </div>`}
+
+    ${w.showCompanies===false ? '' : `
+    <div class="slabel">Company deep dives</div>
+    ${companies}`}
+
+    ${w.featuredPost ? (() => {
+      const fp = w.featuredPost;
+      const m = fp.metrics;
+      return `
+    <div class="slabel">Featured post <span class="slabel-note">— ${w.label}</span></div>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        <div>
+          <div class="ctitle">${fp.title}</div>
+          <div class="csub" style="margin-bottom:0;">${fp.type} post</div>
+        </div>
+        <a href="${fp.url}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--cp-blue);text-decoration:none;padding:6px 14px;border:1.5px solid var(--cp-blue);border-radius:6px;white-space:nowrap;">↗ View post on LinkedIn</a>
+      </div>
+      <div class="paid-kgrid">
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Impressions</div>
+          <div class="kval blue">${m.impressions.toLocaleString()}</div>
+          <div class="ksub">total</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Members reached</div>
+          <div class="kval">${m.membersReached.toLocaleString()}</div>
+          <div class="ksub">unique</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Engagement</div>
+          <div class="kval">${m.engagement.toLocaleString()}</div>
+          <div class="ksub">total actions</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Engagement rate</div>
+          <div class="kval up">${m.engagementRate}</div>
+          <div class="ksub">impressions</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Clicks</div>
+          <div class="kval">${m.clicks}</div>
+          <div class="ksub">total</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">CTR</div>
+          <div class="kval up">${m.ctr}</div>
+          <div class="ksub">click-through rate</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Page viewers</div>
+          <div class="kval">${m.pageViewers}</div>
+          <div class="ksub">from this post</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-blue);">
+          <div class="klbl">Followers gained</div>
+          <div class="kval up">+${m.followersGained}</div>
+          <div class="ksub">from this post</div>
+        </div>
+      </div>
+    </div>`;
+    })() : ''}
+
+    ${w.paidAds ? (() => {
+      const pa = w.paidAds;
+      const budgetPct = (parseFloat(pa.spent.replace('$','')) / parseFloat(pa.budget.replace('$','').replace(',','')) * 100).toFixed(1);
+      const bestCTR = [...pa.ads].sort((a,b)=>parseFloat(b.ctr)-parseFloat(a.ctr))[0].name;
+      const worstCTR = [...pa.ads].filter(a=>parseFloat(a.ctr)>0).sort((a,b)=>parseFloat(a.ctr)-parseFloat(b.ctr))[0]?.name;
+      const bestDwell = [...pa.ads].sort((a,b)=>parseFloat(b.dwellTime)-parseFloat(a.dwellTime))[0]?.name;
+
+      // Benchmarks by format (ZenABM 2026 report, 161,256 ads across 211 companies)
+      const TLA_CTR_BENCH = 2.68, TLA_ER_BENCH = 10.0;
+      const BRAND_CTR_BENCH = 0.42, BRAND_ER_BENCH = 1.5;
+      const isTLA = name => name.includes('Thought Leadership');
+
+      const vsTag = (val, bench) => {
+        const diff = ((val - bench) / bench * 100).toFixed(0);
+        const pct = parseFloat(val);
+        if(pct === 0) return '<span style="font-size:10px;background:rgba(240,68,56,0.12);color:#F04438;padding:1px 5px;border-radius:8px;font-weight:700;">Below</span>';
+        if(val >= bench) return `<span style="font-size:10px;background:rgba(18,183,101,0.12);color:#12B765;padding:1px 5px;border-radius:8px;font-weight:700;">+${diff}%</span>`;
+        return `<span style="font-size:10px;background:rgba(240,68,56,0.12);color:#F04438;padding:1px 5px;border-radius:8px;font-weight:700;">${diff}%</span>`;
+      };
+
+      const adRows = pa.ads.map(a => {
+        const tla = isTLA(a.name);
+        const ctrBench = tla ? TLA_CTR_BENCH : BRAND_CTR_BENCH;
+        const erBench  = tla ? TLA_ER_BENCH  : BRAND_ER_BENCH;
+        const isBestDwell = a.name===bestDwell;
+        const pausedBadge = a.paused ? '<span style="font-size:10px;background:rgba(247,176,9,0.15);color:#92400E;padding:1px 6px;border-radius:10px;margin-left:6px;font-weight:700;">Paused</span>' : '';
+        const nameCell = a.postUrl
+          ? `${a.name}${pausedBadge} <a href="${a.postUrl}" target="_blank" style="display:inline-flex;align-items:center;gap:3px;font-size:10px;color:var(--cp-blue);font-weight:600;text-decoration:none;margin-left:6px;padding:1px 6px;border:1px solid var(--cp-sky);border-radius:10px;" title="View post on LinkedIn">↗ View post</a>`
+          : `${a.name}${pausedBadge}`;
+        const benchLabel = `<span style="font-size:10px;color:var(--cp-muted-light);margin-left:4px;">[${tla?'TLA':'Brand'}]</span>`;
+        const dwellVal = a.dwellTime
+          ? `${a.dwellTime}${isBestDwell ? ' <span style="font-size:10px;background:rgba(18,183,101,0.15);color:#12B765;padding:1px 5px;border-radius:8px;font-weight:700;">↑ Best</span>' : ''}`
+          : '—';
+        return `<tr>
+          <td style="font-weight:500;">${nameCell}${benchLabel}</td>
+          <td class="r">${a.impressions.toLocaleString()}</td>
+          <td class="r">${a.clicks}</td>
+          <td class="r" style="white-space:nowrap;">${a.ctr} ${vsTag(parseFloat(a.ctr), ctrBench)}</td>
+          <td class="r" style="white-space:nowrap;">${a.er} ${vsTag(parseFloat(a.er), erBench)}</td>
+          <td class="r">${a.spent}</td>
+          <td class="r">${dwellVal}</td>
+        </tr>`;
+      }).join('');
+
+      return `
+    <div class="slabel">Paid ads insights <span class="slabel-note">— ${pa.period}</span></div>
+    <div class="card">
+      <div class="ctitle">${pa.campaign}</div>
+      <div class="csub">Objective: ${pa.objective} · Cost type: ${pa.costType} · Budget: ${pa.budget}</div>
+      <div class="paid-kgrid">
+        <div class="kpi" style="border-top-color:var(--cp-navy);">
+          <div class="klbl">Total spent</div>
+          <div class="kval blue">${pa.spent}</div>
+          <div class="ksub">campaign to date</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-navy);">
+          <div class="klbl">Impressions</div>
+          <div class="kval">${pa.totals.impressions.toLocaleString()}</div>
+          <div class="ksub">total</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-navy);">
+          <div class="klbl">Clicks</div>
+          <div class="kval">${pa.totals.clicks}</div>
+          <div class="ksub">total</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-navy);">
+          <div class="klbl">Overall CTR</div>
+          <div class="kval">${pa.totals.ctr}</div>
+          <div class="ksub">all ads</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-navy);">
+          <div class="klbl">Engagement rate</div>
+          <div class="kval">${pa.totals.er}</div>
+          <div class="ksub">all ads</div>
+        </div>
+        <div class="kpi" style="border-top-color:var(--cp-navy);">
+          <div class="klbl">Engagements</div>
+          <div class="kval">${pa.totals.engagements}</div>
+          <div class="ksub">total</div>
+        </div>
+      </div>
+      <div style="margin-bottom:6px;">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--cp-muted-light);margin-bottom:4px;">
+          <span>Budget pacing</span><span>${pa.spent} of ${pa.budget} spent</span>
+        </div>
+        <div class="budget-bar-track">
+          <div class="budget-bar-fill" style="width:${budgetPct}%;"></div>
+          <div class="budget-bar-lbl">${pa.budget}</div>
+        </div>
+      </div>
+      <div style="margin-top:16px;">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:10px;">
+          <div style="font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp-muted);">2026 benchmarks</div>
+          <span style="font-size:11px;color:var(--cp-muted-light);">TLA: CTR ${TLA_CTR_BENCH}% · ER ${TLA_ER_BENCH}%</span>
+          <span style="font-size:11px;color:var(--cp-muted-light);">Brand sponsored: CTR ${BRAND_CTR_BENCH}% · ER ${BRAND_ER_BENCH}%</span>
+          <span style="font-size:10px;color:var(--cp-muted-light);font-style:italic;">Source: ZenABM 2026 — 161,256 ads, 211 companies</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="ad-table">
+            <thead><tr>
+              <th>Ad creative</th>
+              <th class="r">Impressions</th>
+              <th class="r">Clicks</th>
+              <th class="r">CTR vs benchmark</th>
+              <th class="r">ER vs benchmark</th>
+              <th class="r">Spent</th>
+              <th class="r">Dwell time</th>
+            </tr></thead>
+            <tbody>${adRows}</tbody>
+          </table>
+        </div>
+      </div>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--cp-sky-tint);border-left:3px solid var(--cp-blue);border-radius:0 6px 6px 0;font-size:11px;color:var(--cp-muted);line-height:1.7;">
+        <strong style="color:var(--cp-blue);">Key observations:</strong> The campaign has now fully spent its $1,500 budget across 6,667 impressions and 77 clicks. Chris Amenechi Thought Leadership leads overall with 2,774 impressions, 39 clicks, 1.41% CTR and 5.52s dwell time — receiving the largest share of budget at $661.99. Adrian Brown Thought Leadership follows closely at 1.21% CTR and 5.53s dwell time. Both thought leadership formats significantly outperform the 0.42% brand benchmark. Brand Handle – Chris Copy remains paused. Dwell time has no published industry benchmark — figures are internal baselines only.
+      </div>
+    </div>`;
+    })() : ''}
+
+    <div class="slabel">Weekly follower tracker <span class="slabel-note">— Q2 2026 progress to 3,000</span></div>
+    <div class="card">
+      <div class="ctitle">New followers gained per week</div>
+      <div class="csub">Updated every Monday</div>
+      <div style="overflow-x:auto;margin-top:4px;">
+        <table class="wt-table">
+          <thead><tr>
+            <th>Week</th><th class="r">New followers</th><th class="r">Total</th>
+            <th style="padding-left:12px;">Progress to 3,000</th>
+          </tr></thead>
+          <tbody>${trackerRows}</tbody>
+        </table>
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--cp-sky);font-size:11px;color:var(--cp-muted-light);">Rows added each Monday as new weekly data becomes available.</div>
+    </div>
+  `;
+}
+
+// ═══════════════════════════════════════════
+// CHARTS
+// ═══════════════════════════════════════════
+function initCharts(wId){
+  const w=weeks.find(x=>x.id===wId);
+  if(!w) return;
+  if(chartInst[wId]){chartInst[wId].destroy();delete chartInst[wId];}
+
+  const canvas=document.getElementById('sen-'+wId);
+  if(canvas){
+    chartInst[wId]=new Chart(canvas,{
+      type:'doughnut',
+      data:{labels:w.seniority.map(d=>d.l),datasets:[{data:w.seniority.map(d=>d.v),backgroundColor:SEN_C,borderWidth:2,borderColor:'#FAF5F0'}]},
+      options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{display:false}}}
+    });
+  }
+  setTimeout(()=>{
+    const bar=document.getElementById('gb-'+wId);
+    if(bar){
+      const Q2_START=2683, Q2_INC=317;
+      const weekTotal=parseInt(w.kpis.totalFollowers.val.replace(',',''));
+      const q2Pct=Math.min(100,((weekTotal-Q2_START)/Q2_INC*100)).toFixed(1);
+      bar.style.width=q2Pct+'%';
+    }
+  },100);
+}
+
+// Init last (active) tab
+initCharts(weeks[weeks.length-1].id);
+</script>
+</body>
+</html>
