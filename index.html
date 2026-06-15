@@ -795,24 +795,116 @@ const weeks = [
     notableFollowers:[],
     companies:[],
   },
+  {
+    id:'w8', label:'Jun 7–13', partial:false,
+    showFollowers:false, showCompanies:false,
+    kpis:{
+      pageViews:        {val:'604',   sub:'Jun 7–13', delta:'▼ 10.3% vs prior week',  deltaDir:'down'},
+      uniqueVisitors:   {val:'257',   sub:'Jun 7–13', delta:'▲ 24.2% vs prior week',  deltaDir:'up'},
+      newFollowers:     {val:'+20',   sub:'Jun 7–13', delta:'→ No change vs prior week', deltaDir:''},
+      visitorFollow:    {val:'7.8%',  sub:'20 of 257 visitors', delta:'▼ 1.9% vs prior week', deltaDir:'down'},
+      pageSearches:     {val:'1,136', sub:'Jun 7–13', delta:'▼ 8.3% vs prior week',   deltaDir:'down'},
+      totalFollowers:   {val:'2,883', sub:'As of Jun 13'},
+      totalPosts:       {val:'2',     sub:'Jun 7–13', delta:'▲ 100% vs prior week',   deltaDir:'up'},
+      engagementRate:   {val:'—',     sub:'Not available'},
+      engagementMetrics:{val:'—',     sub:'Not available'},
+    },
+    industries:[
+      {n:'Financial Services',              p:'35.4%', v:214},
+      {n:'Business Consulting',             p:'12.6%', v:76},
+      {n:'Tech, Info & Internet',           p:'10.9%', v:66},
+      {n:'IT Services & Consulting',        p:'10.8%', v:65},
+      {n:'Software Development',            p:'9.9%',  v:60},
+      {n:'Banking',                         p:'6.6%',  v:40},
+      {n:'Executive Search Services',       p:'4.5%',  v:27},
+      {n:'Staffing and Recruiting',         p:'3.1%',  v:19},
+      {n:'Non-profit Organizations',        p:'2.3%',  v:14},
+      {n:'Higher Education',               p:'1.7%',  v:10},
+      {n:'Data Infrastructure & Analytics', p:'1.7%',  v:10},
+      {n:'Business Intelligence Platforms', p:'1.7%',  v:10},
+      {n:'Pharmaceutical Manufacturing',    p:'1.5%',  v:9},
+      {n:'Internet Marketplace Platforms',  p:'1.5%',  v:9},
+      {n:'Advertising Services',            p:'1.5%',  v:9},
+      {n:'Executive Offices',               p:'1.5%',  v:9},
+      {n:'Courts of Law',                   p:'1.3%',  v:8},
+    ],
+    jobFunctions:[
+      {n:'Business Development',          v:156, p:'25.8%'},
+      {n:'Engineering',                   v:68,  p:'11.3%'},
+      {n:'Finance',                       v:64,  p:'10.6%'},
+      {n:'Research',                      v:61,  p:'10.1%'},
+      {n:'Sales',                         v:40,  p:'6.6%'},
+      {n:'Operations',                    v:32,  p:'5.3%'},
+      {n:'Product Management',            v:32,  p:'5.3%'},
+      {n:'Information Technology',        v:25,  p:'4.1%'},
+      {n:'Prog. & Project Management',    v:25,  p:'4.1%'},
+      {n:'Customer Success & Support',    v:21,  p:'3.5%'},
+      {n:'Marketing',                     v:19,  p:'3.1%'},
+      {n:'Education',                     v:14,  p:'2.3%'},
+      {n:'Consulting',                    v:11,  p:'1.8%'},
+      {n:'Administrative',                v:9,   p:'1.5%'},
+      {n:'Arts and Design',               v:9,   p:'1.5%'},
+      {n:'Entrepreneurship',              v:9,   p:'1.5%'},
+      {n:'Accounting',                    v:7,   p:'1.2%'},
+      {n:'Others',                        v:12,  p:'<1%'},
+    ],
+    seniority:[
+      {l:'Senior',   v:243, p:'40.2%'},
+      {l:'Entry',    v:133, p:'22%'},
+      {l:'Manager',  v:94,  p:'15.6%'},
+      {l:'VP',       v:82,  p:'13.6%'},
+      {l:'Director', v:47,  p:'7.8%'},
+      {l:'CXO',      v:33,  p:'5.5%'},
+      {l:'Owner',    v:14,  p:'2.3%'},
+      {l:'Partner',  v:9,   p:'1.5%'},
+      {l:'Training', v:3,   p:'<1%'},
+    ],
+    searcherCompanies:[
+      {name:'ClarityPay',                    desc:'', bg:'#075FDC', color:'#FFFFFF', highlight:true},
+      {name:'Skeps',                         desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'The Economic Club of New York', desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Brinley Partners',              desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'The Bolton Group',              desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+    ],
+    searcherJobTitles:[
+      {n:'Software Engineer',                    p:'4%'},
+      {n:'Product Manager',                      p:'3.2%'},
+      {n:'VP of Business Development',           p:'2.7%'},
+      {n:'Co-Founder',                           p:'2.4%'},
+      {n:'Founder',                              p:'2.4%'},
+    ],
+    searcherIndustries:[
+      {n:'Financial Services',          p:'26.4%', v:264},
+      {n:'Software Development',        p:'7%',    v:70},
+      {n:'Business Consulting',         p:'5.6%',  v:56},
+      {n:'Credit Intermediation',       p:'4.5%',  v:45},
+      {n:'Staffing and Recruiting',     p:'4.4%',  v:44},
+    ],
+    notableFollowers:[],
+    companies:[],
+  },
   // ── Add next week below ──
-  // { id:'w8', label:'Jun 7–13', partial:false, kpis:{...}, ... },
+  // { id:'w9', label:'Jun 14–20', partial:false, kpis:{...}, ... },
 ];
 
 // ═══════════════════════════════════════════
 // WEEKLY TRACKER
 // ═══════════════════════════════════════════
 const weeklyTracker = [
-  {label:'Apr 19–25',    gained:15, total:2742},
-  {label:'Apr 26–May 2', gained:17, total:2759},
-  {label:'May 3–9',      gained:16, total:2775},
-  {label:'May 10–16',    gained:50, total:2825},
-  {label:'May 17–23',    gained:10, total:2835},
-  {label:'May 24–30',    gained:16, total:2844},
-  {label:'May 31–Jun 6', gained:20, total:2859},
+  {label:'Apr 1–4',      gained:11, total:2684, note:'Pre-dashboard'},
+  {label:'Apr 5–11',     gained:16, total:2700, note:'Pre-dashboard'},
+  {label:'Apr 12–18',    gained:19, total:2719, note:'Pre-dashboard'},
+  {label:'Apr 19–25',    gained:15, total:2734},
+  {label:'Apr 26–May 2', gained:17, total:2751},
+  {label:'May 3–9',      gained:16, total:2767},
+  {label:'May 10–16',    gained:50, total:2817},
+  {label:'May 17–23',    gained:10, total:2827},
+  {label:'May 24–30',    gained:16, total:2843},
+  {label:'May 31–Jun 6', gained:20, total:2863},
+  {label:'Jun 7–13',     gained:20, total:2883},
 ];
 
-const CURRENT_FOLLOWERS = 2859;
+const CURRENT_FOLLOWERS = 2883;
 const TARGET = 3000;
 const Q2_END = new Date('2026-06-30');
 
@@ -903,18 +995,20 @@ function buildPanel(w){
   const needed=TARGET-CURRENT_FOLLOWERS;
   const npw=wl>0?Math.ceil(needed/wl):'—';
 
-  const Q2_START_FOLLOWERS = 2683;
-  const Q2_INCREMENTAL_TARGET = 317;
+  const Q2_START_FOLLOWERS = 2673;
+  const Q2_INCREMENTAL_TARGET = 327;
   const trackerRows=weeklyTracker.map((r,i)=>{
     const q2gained = r.total - Q2_START_FOLLOWERS;
     const rp=Math.min(100,(q2gained/Q2_INCREMENTAL_TARGET*100)).toFixed(1);
     const isL=i===weeklyTracker.length-1;
     const gc=r.gained>0?'color:var(--cp-success);':'color:var(--cp-muted-light);';
-    return `<tr style="${isL?'background:var(--cp-sky-tint);':''}">
+    const preBadge = r.note ? `<span class="wt-badge" style="background:rgba(100,100,100,0.12);color:var(--cp-muted-light);">${r.note}</span>` : '';
+    return `<tr style="${isL?'background:var(--cp-sky-tint);':r.note?'opacity:0.7;':''}">
       <td style="font-weight:${isL?'600':'400'};color:var(--cp-black);">
         ${r.label}
         ${isL?'<span class="wt-badge wt-latest">Latest</span>':''}
         ${r.partial?'<span class="wt-badge wt-partial">Partial week</span>':''}
+        ${preBadge}
       </td>
       <td class="r" style="font-weight:700;font-size:14px;${gc}">+${r.gained}</td>
       <td class="r" style="font-weight:${isL?'600':'400'};">${r.total.toLocaleString()}</td>
@@ -946,8 +1040,8 @@ function buildPanel(w){
     <div class="slabel">Q2 follower goal</div>
     <div class="card">
       ${(()=>{
-        const Q2_START = 2683;
-        const Q2_TARGET_INCREMENTAL = 317; // 3000 - 2683
+        const Q2_START = 2673;
+        const Q2_TARGET_INCREMENTAL = 327; // 3000 - 2683
         const weekTotal = parseInt(w.kpis.totalFollowers.val.replace(',',''));
         const q2Gained = weekTotal - Q2_START;
         const q2Remaining = Math.max(0, Q2_TARGET_INCREMENTAL - q2Gained);
@@ -959,8 +1053,8 @@ function buildPanel(w){
         return `
         <div class="ctitle">Target: 3,000 followers by end of Q2</div>
         <div style="font-size:11px;color:var(--cp-muted-light);margin-top:3px;margin-bottom:14px;">
-          Q2 requires <strong style="color:var(--cp-black);">317 new followers</strong> (Apr 1–Jun 30) to hit 3,000 —
-          <strong style="color:var(--cp-blue);">+22% more incremental growth</strong> than Q1, which added 260 new followers.
+          Q2 requires <strong style="color:var(--cp-black);">327 new followers</strong> (Apr 1–Jun 30) to hit 3,000 —
+          <strong style="color:var(--cp-blue);">+25.8% more incremental growth</strong> than Q1, which added 260 new followers.
         </div>
         <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
           <div>
@@ -974,7 +1068,7 @@ function buildPanel(w){
           </div>
         </div>
         <div style="margin-bottom:4px;display:flex;justify-content:space-between;font-size:10px;color:var(--cp-muted-light);">
-          <span>Q2 start: 2,683</span><span>${Q2_TARGET_INCREMENTAL} new followers needed</span>
+          <span>Q2 start: 2,673</span><span>${Q2_TARGET_INCREMENTAL} new followers needed</span>
         </div>
         <div class="goal-bar-track">
           <div class="goal-bar-fill" id="gb-${w.id}" style="width:0%;"></div>
@@ -987,7 +1081,7 @@ function buildPanel(w){
           <div class="gs"><div class="gs-lbl">Still needed</div><div class="gs-val">${q2Remaining}</div><div class="gs-sub">to reach 3,000</div></div>
           <div class="gs"><div class="gs-lbl">Weeks left in Q2</div><div class="gs-val">${wl}</div><div class="gs-sub">until Jun 30</div></div>
           <div class="gs"><div class="gs-lbl">Needed / week</div><div class="gs-val">${npw}</div><div class="gs-sub">avg new followers</div></div>
-          <div class="gs"><div class="gs-lbl">vs Q1 growth</div><div class="gs-val" style="color:var(--cp-error);">+22%</div><div class="gs-sub">more growth required</div></div>
+          <div class="gs"><div class="gs-lbl">vs Q1 growth</div><div class="gs-val" style="color:var(--cp-error);">+25.8%</div><div class="gs-sub">more growth required</div></div>
         </div>`;
       })()}
     </div>
@@ -1241,7 +1335,7 @@ function initCharts(wId){
   setTimeout(()=>{
     const bar=document.getElementById('gb-'+wId);
     if(bar){
-      const Q2_START=2683, Q2_INC=317;
+      const Q2_START=2673, Q2_INC=327;
       const weekTotal=parseInt(w.kpis.totalFollowers.val.replace(',',''));
       const q2Pct=Math.min(100,((weekTotal-Q2_START)/Q2_INC*100)).toFixed(1);
       bar.style.width=q2Pct+'%';
