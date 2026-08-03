@@ -1472,8 +1472,99 @@ const weeks = [
       {type:'neutral', text:'Q3 follower goal still pending — tracker continues to reference the 3,000 target, which has now been surpassed.'},
     ],
   },
+  {
+    id:'w15', label:'Jul 26–Aug 1', partial:false,
+    showFollowers:false, showCompanies:false,
+    kpis:{
+      pageViews:        {val:'524',   sub:'Jul 26–Aug 1', delta:'▼ 29.5% vs prior week',  deltaDir:'down'},
+      uniqueVisitors:   {val:'182',   sub:'Jul 26–Aug 1', delta:'▼ 33.8% vs prior week',  deltaDir:'down'},
+      newFollowers:     {val:'+24',   sub:'Jul 26–Aug 1', delta:'▼ 45.5% vs prior week',  deltaDir:'down'},
+      visitorFollow:    {val:'13.2%', sub:'24 of 182 visitors', delta:'▼ 2.8% vs prior week', deltaDir:'down'},
+      pageSearches:     {val:'1,521', sub:'Jul 26–Aug 1', delta:'▼ 23.4% vs prior week',  deltaDir:'down'},
+      totalFollowers:   {val:'3,127', sub:'As of Aug 1'},
+      totalPosts:       {val:'0',     sub:'Jul 26–Aug 1', delta:'→ No change vs prior week', deltaDir:''},
+      engagementRate:   {val:'—',     sub:'Not available'},
+      engagementMetrics:{val:'—',     sub:'Not available'},
+    },
+    industries:[
+      {n:'Financial Services',              p:'25.6%', v:134},
+      {n:'Software Development',            p:'17.7%', v:93},
+      {n:'IT Services & Consulting',        p:'12.2%', v:64},
+      {n:'Tech, Info & Internet',           p:'11.6%', v:61},
+      {n:'Investment Banking',              p:'7.6%',  v:40},
+      {n:'Tech, Info & Media',              p:'5.9%',  v:31},
+      {n:'Staffing and Recruiting',         p:'5%',    v:26},
+      {n:'Advertising Services',            p:'2.9%',  v:15},
+      {n:'Retail',                          p:'2.3%',  v:12},
+      {n:'Non-profit Organizations',        p:'1.9%',  v:10},
+      {n:'Airlines and Aviation',           p:'1.9%',  v:10},
+      {n:'Banking',                         p:'1.9%',  v:10},
+      {n:'Business Consulting',             p:'1.7%',  v:9},
+      {n:'Higher Education',               p:'1.5%',  v:8},
+      {n:'Education Administration',        p:'1.3%',  v:7},
+    ],
+    jobFunctions:[
+      {n:'Business Development',          v:125, p:'23.9%'},
+      {n:'Finance',                       v:77,  p:'14.7%'},
+      {n:'Engineering',                   v:43,  p:'8.2%'},
+      {n:'Sales',                         v:38,  p:'7.3%'},
+      {n:'Operations',                    v:36,  p:'6.9%'},
+      {n:'Marketing',                     v:24,  p:'4.6%'},
+      {n:'Human Resources',               v:23,  p:'4.4%'},
+      {n:'Information Technology',        v:23,  p:'4.4%'},
+      {n:'Research',                      v:18,  p:'3.4%'},
+      {n:'Product Management',            v:15,  p:'2.9%'},
+      {n:'Consulting',                    v:15,  p:'2.9%'},
+      {n:'Customer Success & Support',    v:9,   p:'1.7%'},
+      {n:'Accounting',                    v:9,   p:'1.7%'},
+      {n:'Administrative',                v:8,   p:'1.5%'},
+      {n:'Others',                        v:22,  p:'<1%'},
+    ],
+    seniority:[
+      {l:'Senior',   v:136, p:'26%'},
+      {l:'Entry',    v:116, p:'22.1%'},
+      {l:'Manager',  v:73,  p:'13.9%'},
+      {l:'Director', v:69,  p:'13.2%'},
+      {l:'VP',       v:60,  p:'11.5%'},
+      {l:'Owner',    v:42,  p:'8%'},
+      {l:'CXO',      v:36,  p:'6.9%'},
+      {l:'Partner',  v:5,   p:'<1%'},
+      {l:'Training', v:1,   p:'<1%'},
+    ],
+    searcherCompanies:[
+      {name:'ClarityPay',              desc:'', bg:'#075FDC', color:'#FFFFFF', highlight:true},
+      {name:'Morgan Stanley',          desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Bluefin Payment Systems', desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'ClickHouse',              desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Skeps',                   desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+    ],
+    searcherJobTitles:[
+      {n:'Software Engineer',          p:'11.7%'},
+      {n:'Data Analyst',               p:'2.2%'},
+      {n:'VP of Business Development', p:'2.2%'},
+      {n:'Founder',                    p:'2%'},
+      {n:'Full Stack Engineer',        p:'2%'},
+    ],
+    searcherIndustries:[
+      {n:'Financial Services',       p:'17.4%', v:174},
+      {n:'Software Development',     p:'8.3%',  v:83},
+      {n:'IT Services & Consulting', p:'7%',    v:70},
+      {n:'Tech, Info & Internet',    p:'5%',    v:50},
+      {n:'Credit Intermediation',    p:'3.2%',  v:32},
+    ],
+    notableFollowers:[],
+    companies:[],
+    notes:[
+      {type:'down',    text:'Traffic normalized further after the announcement spike — page views fell 29.5% (524), unique visitors 33.8% (182), and page searches 23.4% (1,521), with impressions still elevated at 72,462 (▲4.2%).'},
+      {type:'down',    text:'New followers slowed to +24 (▼45.5%), though the 13.2% visitor-to-follow rate remains strong relative to pre-announcement weeks.'},
+      {type:'up',      text:'Total followers reached 3,127 — now 127 past the 3,000 milestone with no organic posts published this week.'},
+      {type:'up',      text:'Morgan Stanley, Bluefin Payment Systems, and ClickHouse all appearing as new top page searchers — notable enterprise and payments-industry attention.'},
+      {type:'neutral', text:'Investment Banking entered the top 5 visitor industries at 7.6% (40 visitors) — a new vertical signal not seen in prior weeks.'},
+      {type:'neutral', text:'Airlines and Aviation held steady at 1.9% (10 visitors), continuing the travel vertical interest since the partnership announcement.'},
+    ],
+  },
   // ── Add next week below ──
-  // { id:'w15', label:'Jul 26–Aug 1', partial:false, kpis:{...}, ... },
+  // { id:'w16', label:'Aug 2–8', partial:false, kpis:{...}, ... },
 ];
 
 // ═══════════════════════════════════════════
@@ -1497,9 +1588,10 @@ const weeklyTracker = [
   {label:'Jul 5–11',     gained:35, total:2993},
   {label:'Jul 12–18',    gained:66, total:3059},
   {label:'Jul 19–25',    gained:44, total:3103},
+  {label:'Jul 26–Aug 1', gained:24, total:3127},
 ];
 
-const CURRENT_FOLLOWERS = 3103;
+const CURRENT_FOLLOWERS = 3127;
 const TARGET = 3000;
 const Q2_END = new Date('2026-06-30');
 
