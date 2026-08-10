@@ -93,6 +93,15 @@ body{background:var(--cp-wheat);color:var(--cp-black);font-family:var(--font-bod
 .note-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--cp-sky);font-size:12px;color:var(--cp-muted);line-height:1.6;}
 .note-item:last-child{border-bottom:none;}
 .note-icon{font-size:14px;flex-shrink:0;margin-top:1px;width:18px;text-align:center;}
+.comp-table{width:100%;border-collapse:collapse;font-size:12px;}
+.comp-table th{text-align:left;padding:6px 10px 8px 0;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp-muted-light);border-bottom:1.5px solid var(--cp-sky);}
+.comp-table th.r,.comp-table td.r{text-align:right;padding:9px 10px;}
+.comp-table td{padding:9px 10px 9px 0;border-bottom:1px solid var(--cp-sky);vertical-align:middle;}
+.comp-table tr:last-child td{border-bottom:none;}
+.comp-you{background:rgba(7,95,220,0.06);}
+.comp-rank{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--cp-wheat-100);font-size:10px;font-weight:700;color:var(--cp-muted);}
+.comp-link{color:var(--cp-black);text-decoration:none;font-weight:500;}
+.comp-link:hover{color:var(--cp-blue);}
 .ad-table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px;}
 .ad-table th{text-align:left;padding:6px 10px 8px 0;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--cp-muted-light);border-bottom:1.5px solid var(--cp-sky);}
 .ad-table th.r{text-align:right;}
@@ -1563,35 +1572,184 @@ const weeks = [
       {type:'neutral', text:'Airlines and Aviation held steady at 1.9% (10 visitors), continuing the travel vertical interest since the partnership announcement.'},
     ],
   },
+  {
+    id:'w16', label:'Aug 2–8', partial:false,
+    showFollowers:false, showCompanies:false,
+    kpis:{
+      pageViews:        {val:'680',   sub:'Aug 2–8', delta:'▲ 29.8% vs prior week',  deltaDir:'up'},
+      uniqueVisitors:   {val:'255',   sub:'Aug 2–8', delta:'▲ 40.1% vs prior week',  deltaDir:'up'},
+      newFollowers:     {val:'+27',   sub:'Aug 2–8', delta:'▲ 12.5% vs prior week',  deltaDir:'up'},
+      visitorFollow:    {val:'10.6%', sub:'27 of 255 visitors', delta:'▼ 2.6% vs prior week', deltaDir:'down'},
+      pageSearches:     {val:'1,217', sub:'Aug 2–8', delta:'▼ 20% vs prior week',    deltaDir:'down'},
+      totalFollowers:   {val:'3,156', sub:'As of Aug 8'},
+      totalPosts:       {val:'1',     sub:'Aug 2–8'},
+      engagementRate:   {val:'—',     sub:'Not available'},
+      engagementMetrics:{val:'—',     sub:'Not available'},
+    },
+    industries:[
+      {n:'Financial Services',              p:'50.1%', v:341},
+      {n:'Tech, Info & Internet',           p:'9.4%',  v:64},
+      {n:'Software Development',            p:'8.7%',  v:59},
+      {n:'IT Services & Consulting',        p:'8.2%',  v:56},
+      {n:'Business Consulting',             p:'5.6%',  v:38},
+      {n:'Banking',                         p:'4.6%',  v:31},
+      {n:'Hospitals and Health Care',       p:'3.8%',  v:26},
+      {n:'Staffing and Recruiting',         p:'3.4%',  v:23},
+      {n:'Higher Education',               p:'3.1%',  v:21},
+      {n:'Advertising Services',            p:'3.1%',  v:21},
+      {n:'Telecommunications',              p:'2.8%',  v:19},
+      {n:'Oil and Gas',                     p:'2.6%',  v:18},
+      {n:'Non-profit Organizations',        p:'2.2%',  v:15},
+      {n:'Retail',                          p:'1.6%',  v:11},
+      {n:'Real Estate',                     p:'1.3%',  v:9},
+      {n:'Education Administration',        p:'1.3%',  v:9},
+      {n:'Outsourcing & Offshoring',        p:'1.3%',  v:9},
+    ],
+    jobFunctions:[
+      {n:'Business Development',          v:164, p:'24.1%'},
+      {n:'Sales',                         v:67,  p:'9.9%'},
+      {n:'Engineering',                   v:63,  p:'9.3%'},
+      {n:'Finance',                       v:56,  p:'8.2%'},
+      {n:'Operations',                    v:52,  p:'7.6%'},
+      {n:'Marketing',                     v:39,  p:'5.7%'},
+      {n:'Product Management',            v:37,  p:'5.4%'},
+      {n:'Information Technology',        v:23,  p:'3.4%'},
+      {n:'Customer Success & Support',    v:22,  p:'3.2%'},
+      {n:'Accounting',                    v:20,  p:'2.9%'},
+      {n:'Consulting',                    v:18,  p:'2.6%'},
+      {n:'Entrepreneurship',              v:12,  p:'1.8%'},
+      {n:'Research',                      v:11,  p:'1.6%'},
+      {n:'Prog. & Project Management',    v:9,   p:'1.3%'},
+      {n:'Others',                        v:21,  p:'<1%'},
+    ],
+    seniority:[
+      {l:'Senior',   v:215, p:'31.6%'},
+      {l:'Entry',    v:143, p:'21%'},
+      {l:'CXO',      v:91,  p:'13.4%'},
+      {l:'Director', v:89,  p:'13.1%'},
+      {l:'VP',       v:78,  p:'11.5%'},
+      {l:'Manager',  v:69,  p:'10.1%'},
+      {l:'Owner',    v:20,  p:'2.9%'},
+      {l:'Training', v:8,   p:'1.2%'},
+      {l:'Partner',  v:8,   p:'1.2%'},
+    ],
+    searcherCompanies:[
+      {name:'Anduril Industries', desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Skeps',              desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Elective',           desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Credit One Bank',    desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+      {name:'Nomia Ltd',          desc:'', bg:'#F1F7FD', color:'#1E2D4D'},
+    ],
+    searcherJobTitles:[
+      {n:'Software Engineer',        p:'6.6%'},
+      {n:'Founder',                  p:'2.5%'},
+      {n:'Co-Founder',               p:'2.5%'},
+      {n:'Data Science Specialist',  p:'2.3%'},
+      {n:'Industrial Engineer',      p:'2.1%'},
+    ],
+    searcherIndustries:[
+      {n:'Financial Services',       p:'13%',   v:130},
+      {n:'IT Services & Consulting', p:'6.4%',  v:64},
+      {n:'Business Consulting',      p:'5.8%',  v:58},
+      {n:'Credit Intermediation',    p:'5.2%',  v:52},
+      {n:'Software Development',     p:'5.1%',  v:51},
+    ],
+    notableFollowers:[],
+    companies:[],
+    notes:[
+      {type:'up',      text:'Impressions climbed to 99,216 (▲36.9%) — a new dashboard record — driven by the second partnership announcement post, which combined organic and paid promotion.'},
+      {type:'up',      text:'New followers rose to +27 (▲12.5%), and total followers reached 3,156 — now 156 past the 3,000 milestone.'},
+      {type:'up',      text:'Page views up 29.8% (680) and unique visitors up 40.1% (255) — continued strong traffic momentum following the announcement.'},
+      {type:'up',      text:'CXO seniority hit 13.4% (91 visitors) — the highest executive concentration recorded in the dashboard to date, alongside Director at 13.1%.'},
+      {type:'down',    text:'Page searches fell to 1,217 (▼20%), though this follows two exceptionally high weeks in July.'},
+      {type:'neutral', text:'Anduril Industries and Elective appearing as new top page searchers — notable names outside the usual fintech/BNPL peer set.'},
+      {type:'neutral', text:'"Manta" and "Search" appeared as new top search keywords alongside the recurring Skeps and ClarityPay.'},
+    ],
+    featuredPost:{
+      title:'Partnership Announcement II',
+      url:'https://www.linkedin.com/posts/claritypay_today-claritypay-announces-our-partnership-activity-7490065319189708800-vjDh',
+      type:'Organic + Sponsored',
+      metrics:{
+        impressions:1502, membersReached:774, pageViewers:0,
+        followersGained:0, engagement:141, engagementRate:'9.4%',
+        clicks:0, ctr:'',
+      },
+      sponsored:{
+        impressions:28376, engagements:13, engagementRate:'0.0%',
+        costPerEngagement:'$27.13', ecpm:'$12.43',
+      },
+    },
+    competitors:{
+      yourPosts:{value:1, vsCompetitors:-52.6},
+      yourER:{value:'0.3%', vsCompetitors:-93.7},
+      followers:[
+        {rank:1,  name:'Affirm',         url:'https://www.linkedin.com/company/affirm/',            total:370626, gained:1796, pct:0.8},
+        {rank:2,  name:'Synchrony',      url:'https://www.linkedin.com/company/synchrony-financial/',total:228855, gained:1002, pct:36.5},
+        {rank:3,  name:'Klarna',         url:'https://www.linkedin.com/company/klarna/',            total:420960, gained:876,  pct:0.3},
+        {rank:4,  name:'Bread Financial',url:'https://www.linkedin.com/company/bread-financial/',   total:136082, gained:265,  pct:82.8},
+        {rank:5,  name:'Afterpay',       url:'https://www.linkedin.com/company/afterpay-com-au/',   total:150978, gained:92,   pct:57.6},
+        {rank:6,  name:'CareCredit',     url:'https://www.linkedin.com/company/carecredit/',        total:10545,  gained:50,   pct:47.1},
+        {rank:7,  name:'ClarityPay',     url:'https://www.linkedin.com/company/claritypay/',        total:3156,   gained:27,   pct:12.5, isYou:true},
+        {rank:8,  name:'PatientFi',      url:'https://www.linkedin.com/company/patientfi/',         total:27287,  gained:25,   pct:31.6},
+        {rank:9,  name:'HFD',            url:'https://www.linkedin.com/company/gohfd/',             total:4454,   gained:9,    pct:25},
+        {rank:10, name:'PowerPay',       url:'https://www.linkedin.com/company/getpowerpay/',       total:2708,   gained:2,    pct:0},
+      ],
+      posts:[
+        {rank:1,  name:'Klarna',         url:'https://www.linkedin.com/company/klarna/',            value:8, pct:100},
+        {rank:2,  name:'CareCredit',     url:'https://www.linkedin.com/company/carecredit/',        value:4, pct:100},
+        {rank:3,  name:'Bread Financial',url:'https://www.linkedin.com/company/bread-financial/',   value:3, pct:50},
+        {rank:4,  name:'PatientFi',      url:'https://www.linkedin.com/company/patientfi/',         value:2, pct:null},
+        {rank:5,  name:'Synchrony',      url:'https://www.linkedin.com/company/synchrony-financial/',value:2, pct:50},
+        {rank:6,  name:'ClarityPay',     url:'https://www.linkedin.com/company/claritypay/',        value:1, pct:null, isYou:true},
+        {rank:7,  name:'HFD',            url:'https://www.linkedin.com/company/gohfd/',             value:0, pct:100},
+        {rank:8,  name:'Afterpay',       url:'https://www.linkedin.com/company/afterpay-com-au/',   value:0, pct:null},
+        {rank:9,  name:'PowerPay',       url:'https://www.linkedin.com/company/getpowerpay/',       value:0, pct:null},
+        {rank:10, name:'Affirm',         url:'https://www.linkedin.com/company/affirm/',            value:0, pct:100},
+      ],
+      engagement:[
+        {rank:1,  name:'Klarna',         url:'https://www.linkedin.com/company/klarna/',            value:876, pct:25.7},
+        {rank:2,  name:'Synchrony',      url:'https://www.linkedin.com/company/synchrony-financial/',value:820, pct:70.8},
+        {rank:3,  name:'Bread Financial',url:'https://www.linkedin.com/company/bread-financial/',   value:247, pct:3.8},
+        {rank:4,  name:'CareCredit',     url:'https://www.linkedin.com/company/carecredit/',        value:123, pct:19.4},
+        {rank:5,  name:'Affirm',         url:'https://www.linkedin.com/company/affirm/',            value:85,  pct:69.8},
+        {rank:6,  name:'ClarityPay',     url:'https://www.linkedin.com/company/claritypay/',        value:64,  pct:357.1, isYou:true},
+        {rank:7,  name:'Afterpay',       url:'https://www.linkedin.com/company/afterpay-com-au/',   value:49,  pct:55.5},
+        {rank:8,  name:'HFD',            url:'https://www.linkedin.com/company/gohfd/',             value:15,  pct:48.3},
+        {rank:9,  name:'PatientFi',      url:'https://www.linkedin.com/company/patientfi/',         value:11,  pct:1000},
+        {rank:10, name:'PowerPay',       url:'https://www.linkedin.com/company/getpowerpay/',       value:-1,  pct:null},
+      ],
+    },
+  },
   // ── Add next week below ──
-  // { id:'w16', label:'Aug 2–8', partial:false, kpis:{...}, ... },
+  // { id:'w17', label:'Aug 9–15', partial:false, kpis:{...}, ... },
 ];
 
 // ═══════════════════════════════════════════
 // WEEKLY TRACKER
 // ═══════════════════════════════════════════
 const weeklyTracker = [
-  {label:'Apr 1–4',      gained:11, total:2690, note:'Pre-dashboard'},
-  {label:'Apr 5–11',     gained:16, total:2706, note:'Pre-dashboard'},
-  {label:'Apr 12–18',    gained:19, total:2725, note:'Pre-dashboard'},
-  {label:'Apr 19–25',    gained:15, total:2740},
-  {label:'Apr 26–May 2', gained:17, total:2757},
-  {label:'May 3–9',      gained:16, total:2773},
-  {label:'May 10–16',    gained:50, total:2823},
-  {label:'May 17–23',    gained:10, total:2833},
-  {label:'May 24–30',    gained:16, total:2849},
-  {label:'May 31–Jun 6', gained:20, total:2869},
-  {label:'Jun 7–13',     gained:20, total:2889},
-  {label:'Jun 14–20',    gained:17, total:2906},
-  {label:'Jun 21–27',    gained:33, total:2939},
-  {label:'Jun 28–Jul 4', gained:19, total:2958},
-  {label:'Jul 5–11',     gained:35, total:2993},
-  {label:'Jul 12–18',    gained:66, total:3059},
-  {label:'Jul 19–25',    gained:44, total:3103},
-  {label:'Jul 26–Aug 1', gained:24, total:3127},
+  {label:'Apr 1–4',      gained:11, total:2692, note:'Pre-dashboard'},
+  {label:'Apr 5–11',     gained:16, total:2708, note:'Pre-dashboard'},
+  {label:'Apr 12–18',    gained:19, total:2727, note:'Pre-dashboard'},
+  {label:'Apr 19–25',    gained:15, total:2742},
+  {label:'Apr 26–May 2', gained:17, total:2759},
+  {label:'May 3–9',      gained:16, total:2775},
+  {label:'May 10–16',    gained:50, total:2825},
+  {label:'May 17–23',    gained:10, total:2835},
+  {label:'May 24–30',    gained:16, total:2851},
+  {label:'May 31–Jun 6', gained:20, total:2871},
+  {label:'Jun 7–13',     gained:20, total:2891},
+  {label:'Jun 14–20',    gained:17, total:2908},
+  {label:'Jun 21–27',    gained:33, total:2941},
+  {label:'Jun 28–Jul 4', gained:19, total:2960},
+  {label:'Jul 5–11',     gained:35, total:2995},
+  {label:'Jul 12–18',    gained:66, total:3061},
+  {label:'Jul 19–25',    gained:44, total:3105},
+  {label:'Jul 26–Aug 1', gained:24, total:3129},
+  {label:'Aug 2–8',      gained:27, total:3156},
 ];
 
-const CURRENT_FOLLOWERS = 3127;
+const CURRENT_FOLLOWERS = 3156;
 const TARGET = 3000;
 const Q2_END = new Date('2026-06-30');
 
@@ -1859,6 +2017,37 @@ function buildPanel(w){
         ${m.pageViewers ? `<div class="kpi" style="border-top-color:var(--cp-blue);"><div class="klbl">Page viewers</div><div class="kval">${m.pageViewers}</div><div class="ksub">from this post</div></div>` : ''}
         ${m.followersGained ? `<div class="kpi" style="border-top-color:var(--cp-blue);"><div class="klbl">Followers gained</div><div class="kval up">+${m.followersGained}</div><div class="ksub">from this post</div></div>` : ''}
       </div>
+      ${fp.sponsored ? `
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--cp-sky);">
+        <div class="ctitle" style="margin-bottom:10px;">Sponsored performance</div>
+        <div class="paid-kgrid">
+          <div class="kpi" style="border-top-color:var(--cp-navy);">
+            <div class="klbl">Sponsored impressions</div>
+            <div class="kval">${fp.sponsored.impressions.toLocaleString()}</div>
+            <div class="ksub">total</div>
+          </div>
+          <div class="kpi" style="border-top-color:var(--cp-navy);">
+            <div class="klbl">Sponsored engagements</div>
+            <div class="kval">${fp.sponsored.engagements}</div>
+            <div class="ksub">total</div>
+          </div>
+          <div class="kpi" style="border-top-color:var(--cp-navy);">
+            <div class="klbl">Sponsored ER</div>
+            <div class="kval">${fp.sponsored.engagementRate}</div>
+            <div class="ksub">of impressions</div>
+          </div>
+          <div class="kpi" style="border-top-color:var(--cp-navy);">
+            <div class="klbl">Cost / engagement</div>
+            <div class="kval blue">${fp.sponsored.costPerEngagement}</div>
+            <div class="ksub">sponsored</div>
+          </div>
+          <div class="kpi" style="border-top-color:var(--cp-navy);">
+            <div class="klbl">eCPM</div>
+            <div class="kval blue">${fp.sponsored.ecpm}</div>
+            <div class="ksub">effective cost per 1K</div>
+          </div>
+        </div>
+      </div>` : ''}
     </div>`;
     })() : ''}
 
@@ -1976,6 +2165,75 @@ function buildPanel(w){
       </div>
       <div style="margin-top:12px;padding:10px 14px;background:var(--cp-sky-tint);border-left:3px solid var(--cp-blue);border-radius:0 6px 6px 0;font-size:11px;color:var(--cp-muted);line-height:1.7;">
         <strong style="color:var(--cp-blue);">Key observations:</strong> The campaign has now fully spent its $1,500 budget across 6,667 impressions and 77 clicks. Chris Amenechi Thought Leadership leads overall with 2,774 impressions, 39 clicks, 1.41% CTR and 5.52s dwell time — receiving the largest share of budget at $661.99. Adrian Brown Thought Leadership follows closely at 1.21% CTR and 5.53s dwell time. Both thought leadership formats significantly outperform the 0.42% brand benchmark. Brand Handle – Chris Copy remains paused. Dwell time has no published industry benchmark — figures are internal baselines only.
+      </div>
+    </div>`;
+    })() : ''}
+
+    ${w.competitors ? (() => {
+      const c = w.competitors;
+      const vsTag = (pct) => {
+        const up = pct >= 0;
+        const color = up ? 'var(--cp-success)' : 'var(--cp-error)';
+        const arrow = up ? '▲' : '▼';
+        return `<span style="color:${color};font-weight:700;">${arrow} ${Math.abs(pct)}%</span>`;
+      };
+      const rankRow = (r, valLabel, valFmt) => `
+        <tr class="${r.isYou?'comp-you':''}">
+          <td><span class="comp-rank">${r.rank}</span></td>
+          <td><a href="${r.url}" target="_blank" class="comp-link">${r.name}</a>${r.isYou?' <span class="wt-badge wt-latest" style="margin-left:4px;">You</span>':''}</td>
+          ${r.total!==undefined ? `<td class="r">${r.total.toLocaleString()}</td>` : ''}
+          <td class="r" style="font-weight:700;">${valFmt(r)}</td>
+          <td class="r">${r.pct===null||r.pct===undefined ? '—' : vsTag(r.pct)}</td>
+        </tr>`;
+      const followerRows = c.followers.map(r=>rankRow(r, '', r=>('+'+r.gained))).join('');
+      const postRows = c.posts.map(r=>rankRow(r, '', r=>r.value)).join('');
+      const engRows = c.engagement.map(r=>rankRow(r, '', r=>r.value)).join('');
+      return `
+    <div class="slabel">Competitor benchmarking <span class="slabel-note">— ${w.label} · last 7 days</span></div>
+    <div class="card" style="margin-bottom:10px;">
+      <div class="ctitle">Your page vs competitors</div>
+      <div class="csub">How ClarityPay compares to peer BNPL/pay-later companies this week</div>
+      <div class="g2">
+        <div style="background:var(--cp-wheat);border:1px solid var(--cp-sky);border-radius:8px;padding:14px 16px;">
+          <div class="klbl">Your total posts</div>
+          <div class="kval blue">${c.yourPosts.value}</div>
+          <div style="font-size:11px;margin-top:4px;">${vsTag(c.yourPosts.vsCompetitors)} <span style="color:var(--cp-muted-light);">vs competitor avg</span></div>
+        </div>
+        <div style="background:var(--cp-wheat);border:1px solid var(--cp-sky);border-radius:8px;padding:14px 16px;">
+          <div class="klbl">Your engagement rate</div>
+          <div class="kval blue">${c.yourER.value}</div>
+          <div style="font-size:11px;margin-top:4px;">${vsTag(c.yourER.vsCompetitors)} <span style="color:var(--cp-muted-light);">vs competitor avg</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <div class="ctitle">New follower leaderboard</div>
+      <div class="csub">Ranked by new followers gained this week</div>
+      <div style="overflow-x:auto;">
+        <table class="comp-table">
+          <thead><tr><th>#</th><th>Company</th><th class="r">Total followers</th><th class="r">New followers</th><th class="r">WoW change</th></tr></thead>
+          <tbody>${followerRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card" style="margin-bottom:10px;">
+      <div class="ctitle">Total posts leaderboard</div>
+      <div class="csub">Ranked by posts published this week</div>
+      <div style="overflow-x:auto;">
+        <table class="comp-table">
+          <thead><tr><th>#</th><th>Company</th><th class="r">Posts</th><th class="r">WoW change</th></tr></thead>
+          <tbody>${postRows}</tbody>
+        </table>
+      </div>
+    </div>
+    <div class="card">
+      <div class="ctitle">Total engagement leaderboard</div>
+      <div class="csub">Ranked by total engagements this week</div>
+      <div style="overflow-x:auto;">
+        <table class="comp-table">
+          <thead><tr><th>#</th><th>Company</th><th class="r">Engagements</th><th class="r">WoW change</th></tr></thead>
+          <tbody>${engRows}</tbody>
+        </table>
       </div>
     </div>`;
     })() : ''}
